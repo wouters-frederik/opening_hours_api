@@ -1,4 +1,4 @@
-![Alt text](public/images/logo.jpg?raw=true "openinghours logo")
+![Alt text](public/images/logo_200.png?raw=true "openinghours logo")
 
 # Opening hours api
 
