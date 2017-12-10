@@ -1,8 +1,17 @@
-# opening hours api
+# Opening hours api
 
-## api
+## Installation
 
-### endpoints
+1. git clone this repository
+2. (install npm)
+3. npm install
+4. (install mysql file into your mysql)
+5. Set your db credentials
+6. run node server.js
+
+## API
+
+### Endpoints
 
 #### GET /api/v1/openinghours/ORG_ID/CHANNEL_ID
 retrieves opening hours for organisation ORG_ID and their channel CHANNEL_ID.
