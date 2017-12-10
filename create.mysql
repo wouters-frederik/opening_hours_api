@@ -1,0 +1,27 @@
+-- Create syntax for TABLE 'channels'
+CREATE TABLE `channels` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- Create syntax for TABLE 'opening_hours'
+CREATE TABLE `opening_hours` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `organisation_id` int(11) DEFAULT NULL,
+  `channel_id` int(11) DEFAULT NULL,
+  `day` date DEFAULT NULL,
+  `start_time` int(11) DEFAULT NULL,
+  `end_time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `org_chann_lookup_index` (`organisation_id`,`channel_id`),
+  KEY `org_chan_day_index` (`day`,`organisation_id`,`channel_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+-- Create syntax for TABLE 'organisations'
+CREATE TABLE `organisations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `remote_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
