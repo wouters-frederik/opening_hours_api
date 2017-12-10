@@ -4,64 +4,76 @@
 
 ### endpoints
 
-####opvragen van kanalen
-GET /openingsuren.vlaanderen.be/api/v1/openingsuren/org
-geeft kanalen terug voor deze organisatie
 
-####Opvragen van de openingsuren van een kanaal
-GET /openingsuren.vlaanderen.be/api/v1/openingsuren/org/kanaal
-geeft openingsuren set teug voor ORG organisatie en KANAAL kanaal.
-
-####opvragen of kanalen geopend zijn
-GET /openingsuren.vlaanderen.be/api/v1/geopend/org
-geeft terug welke kanalen geopend zijn van deze organisatie
-####opvragen of een kanaal geopend is
-GET /openingsuren.vlaanderen.be/api/v1/geopend/org/kanaal
-geeft terug of dit kanaal voor deze organisatie geopend is.
+#### GET /api/v1/openingsuren/ORG_ID
+Retrieve channels and their opening hours from an organisation.
+url parameters:
+* from (e.g. 2017-12-31)
+* to (e.g. 2017-12-31)
 
 
-## redactie
+#### GET /api/v1/openingsuren/ORG_ID/CHANNEL_ID
+retrieves opening hours for organisation ORG_ID and their channel CHANNEL_ID.
+url parameters:
+* from (e.g. 2017-12-31)
+* to (e.g. 2017-12-31)
 
-### organisaties
-op de overzichtpagnia organisaties kan je de verschillende contactpunten ingeven.
-Bijvoorbeeld "informatie vlaanderen" of "stad leuven"
-Je geeft hier ook de referentie in naar de authentieke bron indien bestaand.
-Elke organisatie heeft een aantal kanalen:
-
-### kanalen
-Een kanaal is bijvoorbeeld "chat" of "mail" of "telefoonnummer" of "bel me terug"
-op de overzichtpagina kanalen kan je deze kanalen beheren.
-Elke organisatie kan zo zijn eigen blend van copeningsuren samenstellen.
-
-
-## overzichtpagina
-
-op de overzichtpagina kan je
-- springen naar de openingsuren van een ander kanaal van een andere organisatie
-- springen naar de openingsuren van eenzelfde kanaal/organisatie in een andere week
-- openingsuren (schema) kopieren naar datum X(bijvoorbeeld tot het einde van het jaar)
-- tijdslots van openingsuren ingeven per weekdag  (hier is geen limiet van 9 tot 9:45, van 10 tot 10:45 van 11 tot 11:45 enz).
-- tijdslots deleten
+#### GET /api/v1/geopend/org
+retrieves all opening hours for this week grouped by organisation and channel and day.
+url parameters:
+* from (e.g. 2017-12-31)
+* to (e.g. 2017-12-31)
 
 
-## datastructuur
+#### GET /api/v1/geopend/ORG_ID/CHANNEL_ID
+Is this specific channel CHANNEL_ID for organisation ORG_ID open or not?
 
-### organisatie
+#### GET /api/v1/geopend/ORG_ID
+Retrieves the open channels for organisation ORG_ID
+
+#### GET /api/v1/geopend
+Retrieves the open channels for all organisations grouped per organisation
+
+
+
+## editing
+
+### organisations
+on the overview page "organisations" you can add/edit the system's organisations.
+Each organisation has a set of channels (phone/email/...)
+
+### channels
+A chat is for example chat, email, phone, ...
+Each organisation can have their own blend of channels and opening hours for each of these.
+For the moment channels is global, you enter channels and every organisation can add opening hours for them for this channel.
+
+## overview page.
+on the overview page one can
+- jump to the opening hours of different channels of different organisations.
+- jump to opening hours of samen organisation / different channel
+- copy opening hours schemas from one channel to another or across organisations, and this for longer periods (until the end of the year).
+- enter as much timeslots per weekday as wanted (not limited) e.g.: form 9 to 10, from 10 to 11, from 11 to 12, from 13 to 14.
+- delete timeslots (close opening hours) (= disable channel)
+
+
+## datastructure
+
+### organisation
 
 - ID
 - name
-- link naar authentieke bron
+- link to remote source
 
-### kanaal
+### channel
 
 - ID
 - name
 
-### openingsuren
+### opening_hours
 
 - ID
-- organisatie_id
-- kanaal_id
-- dag (2017-12-31)
-- start (09:00)
-- eind (09:45)
+- organisation_id
+- channel_id
+- day (2017-12-31)
+- start_time (timestamp)
+- end_time (timestamp)
