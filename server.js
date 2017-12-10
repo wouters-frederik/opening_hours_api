@@ -394,11 +394,17 @@ protectedRouter.get('/login', function(req, res) {
 // more routes for our API will happen here
 
 
+var frontFacingRouter = express.Router();
+frontFacingRouter.get('/', function(req, res) {
+    res.sendfile('htmls/frontpage.html');
+});
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api/v1', router);
 app.use('/ui',  protectedRouter);
+app.use('/',  frontFacingRouter);
+
 app.use(express.static('public'))
 // START THE SERVER
 // =============================================================================
