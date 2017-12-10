@@ -9,7 +9,9 @@ const mysql = require('mysql');
 const https = require('https');
 const express = require('express');
 const port = process.env.PORT || 8080;
-const dbUrl = process.env.CLEARDB_DATABASE_URL || 'mysql://root:mysql@localhost/openinghours?reconnect=true';
+//const dbUrl = process.env.CLEARDB_DATABASE_URL || 'mysql://root:mysql@localhost/openinghours?reconnect=true';
+const dbUrl = process.env.CLEARDB_DATABASE_URL || 'mysql://baa9eb41ccad81:4ffc8dac@eu-cdbr-west-01.cleardb.com/heroku_fd6b427aaeb206e?reconnect=true';
+
 const bodyParser = require('body-parser');
 
 
