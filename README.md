@@ -1,8 +1,8 @@
 # openingsuren api
 
-##api
+## api
 
-###endpoints
+### endpoints
 
 ####opvragen van kanalen
 GET /openingsuren.vlaanderen.be/api/v1/openingsuren/org
