@@ -399,7 +399,7 @@ protectedRouter.get('/login', function(req, res) {
 // all of our routes will be prefixed with /api
 app.use('/api/v1', router);
 app.use('/ui',  protectedRouter);
-
+app.use(express.static('public'))
 // START THE SERVER
 // =============================================================================
 app.listen(port);
