@@ -4,7 +4,15 @@
 
 ### endpoints
 
-#### GET /api/v1/openingsuren/ORG_ID
+#### GET /api/v1/openinghours/ORG_ID/CHANNEL_ID
+retrieves opening hours for organisation ORG_ID and their channel CHANNEL_ID.
+
+url parameters:
+* from (e.g. 2017-12-31)
+* to (e.g. 2017-12-31)
+
+
+#### GET /api/v1/openinghours/ORG_ID
 Retrieve channels and their opening hours from an organisation.
 
 url parameters:
@@ -12,39 +20,30 @@ url parameters:
 * to (e.g. 2017-12-31)
 
 
-#### GET /api/v1/openingsuren/ORG_ID/CHANNEL_ID
-retrieves opening hours for organisation ORG_ID and their channel CHANNEL_ID.
-
-url parameters:
-* from (e.g. 2017-12-31)
-* to (e.g. 2017-12-31)
-
-#### GET /api/v1/geopend/org
+#### GET /api/v1/openinghours
 retrieves all opening hours for this week grouped by organisation and channel and day.
 
 url parameters:
 * from (e.g. 2017-12-31)
 * to (e.g. 2017-12-31)
 
-
-#### GET /api/v1/geopend/ORG_ID/CHANNEL_ID
+#### GET /api/v1/open/ORG_ID/CHANNEL_ID
 Is this specific channel CHANNEL_ID for organisation ORG_ID open or not?
 
 url parameters
 * timestamp: the timestamp to check if channel is opened (defaults to NOW)
 
-#### GET /api/v1/geopend/ORG_ID
+#### GET /api/v1/open/ORG_ID
 Retrieves the open channels for organisation ORG_ID
 
 url parameters
 * timestamp: the timestamp to check if channels are opened (defaults to NOW)
 
-#### GET /api/v1/geopend
+#### GET /api/v1/open
 Retrieves the open channels for all organisations grouped per organisation
 
 url parameters
 * timestamp: the timestamp to check if channels are opened (defaults to NOW)
-
 
 
 ## editing
