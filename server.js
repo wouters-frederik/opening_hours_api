@@ -14,9 +14,12 @@ const bodyParser = require('body-parser');
 
 
 var dbConnection = mysql.createConnection(dbUrl);
+console.log('connecting to db');
+console.log(dbUrl);
 
 dbConnection.connect(function(err) {
     if (err) throw err;
+
     console.log("Connected!");
 });
 
