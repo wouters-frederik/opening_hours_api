@@ -14,12 +14,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 var dbPool  = mysql.createPool(dbUrl);
-//var dbConnection = mysql.createConnection(dbUrl);
-// dbConnection.connect(function(err) {
-//     if (err) throw err;
-//
-//     console.log("Connected!");
-// });
+
 
 var app = express();
 // configure app to use bodyParser()
@@ -29,11 +24,11 @@ app.use(bodyParser.json());
 app.set('json spaces', 40);
 app.use(express.static( path.join(__dirname, 'public')));
 
-// ROUTES FOR OUR API
-// =============================================================================
-var router = express.Router();              // get an instance of the express Router
 
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+
+
+
+/////////////////////////HELPER FUNCTIONS
 
 
 
@@ -110,6 +105,15 @@ function transformQueryResultsToDaysOutput(results){
     });
     return $days;
 }
+
+
+
+
+
+
+// ROUTES FOR OUR API
+// =============================================================================
+var router = express.Router();              // get an instance of the express Router
 
 
 router.get('/openinghours/:organisatie_id/:channel_id', function(req, res) {
@@ -221,9 +225,7 @@ router.get('/openinghours', function(req, res) {
 });
 
 
-
-
-
+//////////////////// OPEN ROUTES
 //                  GEOPEND
 router.get('/open/:organisatie_id/:channel_id', function(req, res) {
     //req.params.organisatie_id
@@ -317,7 +319,7 @@ router.get('/open/:organisatie_id', function(req, res) {
 
 
 //voor intern gebruik _ overzichtpagina
-router.get('/geopend', function(req, res) {
+router.get('/open', function(req, res) {
     //req.params.organisatie_id
     //req.params.channel_id
     //optionele url parameter: timestamp (toon status on timestamp).
@@ -376,26 +378,27 @@ router.get('/', function(req, res) {
 
 
 
-var UIrouter = express.Router();
-UIrouter.get('/', function(req, res) {
+var protectedRouter = express.Router();
+protectedRouter.get('/', function(req, res) {
     res.sendfile('htmls/ingave.html');
 });
-UIrouter.get('/channels', function(req, res) {
+protectedRouter.get('/channels', function(req, res) {
     res.sendfile('htmls/kanalen.html');
 });
-UIrouter.get('/organisations', function(req, res) {
+protectedRouter.get('/organisations', function(req, res) {
     res.sendfile('htmls/organisaties.html');
 });
-UIrouter.get('/login', function(req, res) {
+protectedRouter.get('/login', function(req, res) {
     res.sendfile('htmls/login.html');
 });
 // more routes for our API will happen here
 
 
+
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api/v1', router);
-app.use('/ui', UIrouter);
+app.use('/ui',  protectedRouter);
 
 // START THE SERVER
 // =============================================================================
