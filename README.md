@@ -1,3 +1,5 @@
+![Alt text](public/images/logo.jpg?raw=true "openinghours logo")
+
 # Opening hours api
 
  :exclamation:  :exclamation: NOT PRODUCTION READY YET  :exclamation: :exclamation:
