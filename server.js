@@ -124,7 +124,7 @@ router.get('/openinghours/:organisatie_id/:channel_id', function(req, res) {
     // console.log(req.params.organisatie_id);
     // console.log(req.params.channel_id);
 
-    dbConnection.query('SELECT * ' +
+    dbPool.query('SELECT * ' +
         'FROM opening_hours ' +
         'WHERE organisation_id = ? ' +
         '   AND channel_id = ?' +
