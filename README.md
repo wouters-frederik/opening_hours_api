@@ -11,10 +11,12 @@
 6. run node server.js
 
 ### heroku
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 1. press the button above.
 2. add clearDB to your heroku application
 3. upload the mysql file in the ClearDB instance
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 
 ## API
 
