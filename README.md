@@ -67,6 +67,14 @@ Retrieves the open channels for all organisations grouped per organisation
 url parameters
 * timestamp: the timestamp to check if channels are opened (defaults to NOW)
 
+#### GET api/v1/channels
+List all the available channels.
+
+#### GET api/v1/organisations
+List all the available organisations.
+
+#### GET api/v1/organisations/ORG_ID
+Show the organisation detail
 
 ## editing
 
