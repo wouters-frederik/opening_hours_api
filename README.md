@@ -4,7 +4,6 @@
 
 ### endpoints
 
-
 #### GET /api/v1/openingsuren/ORG_ID
 Retrieve channels and their opening hours from an organisation.
 
@@ -36,10 +35,14 @@ url parameters
 
 #### GET /api/v1/geopend/ORG_ID
 Retrieves the open channels for organisation ORG_ID
+
+url parameters
 * timestamp: the timestamp to check if channels are opened (defaults to NOW)
 
 #### GET /api/v1/geopend
 Retrieves the open channels for all organisations grouped per organisation
+
+url parameters
 * timestamp: the timestamp to check if channels are opened (defaults to NOW)
 
 
@@ -47,7 +50,7 @@ Retrieves the open channels for all organisations grouped per organisation
 ## editing
 
 ### organisations
-on the overview page "organisations" you can add/edit the system's organisations.
+On the overview page "organisations" you can add/edit the system's organisations.
 Each organisation has a set of channels (phone/email/...)
 
 ### channels
@@ -56,7 +59,7 @@ Each organisation can have their own blend of channels and opening hours for eac
 For the moment channels is global, you enter channels and every organisation can add opening hours for them for this channel.
 
 ## overview page.
-on the overview page one can
+On the overview page one can
 - jump to the opening hours of different channels of different organisations.
 - jump to opening hours of samen organisation / different channel
 - copy opening hours schemas from one channel to another or across organisations, and this for longer periods (until the end of the year).
