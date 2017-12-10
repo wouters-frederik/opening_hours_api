@@ -9,21 +9,17 @@ const mysql = require('mysql');
 const https = require('https');
 const express = require('express');
 const port = process.env.PORT || 8080;
-//const dbUrl = process.env.CLEARDB_DATABASE_URL || 'mysql://root:mysql@localhost/openinghours?reconnect=true';
-const dbUrl = process.env.CLEARDB_DATABASE_URL || 'mysql://baa9eb41ccad81:4ffc8dac@eu-cdbr-west-01.cleardb.com/heroku_fd6b427aaeb206e?reconnect=true';
+const dbUrl = process.env.CLEARDB_DATABASE_URL || 'mysql://root:mysql@localhost/openinghours?reconnect=true';
 
 const bodyParser = require('body-parser');
 
-
-var dbConnection = mysql.createConnection(dbUrl);
-console.log('connecting to db');
-console.log(dbUrl);
-
-dbConnection.connect(function(err) {
-    if (err) throw err;
-
-    console.log("Connected!");
-});
+var dbPool  = mysql.createPool(dbUrl);
+//var dbConnection = mysql.createConnection(dbUrl);
+// dbConnection.connect(function(err) {
+//     if (err) throw err;
+//
+//     console.log("Connected!");
+// });
 
 var app = express();
 // configure app to use bodyParser()
@@ -165,7 +161,7 @@ router.get('/openinghours/:organisatie_id', function(req, res) {
     // console.log(req.params.organisatie_id);
     // console.log(req.params.channel_id);
 
-    dbConnection.query('SELECT * ' +
+    dbPool.query('SELECT * ' +
         'FROM opening_hours ' +
         'WHERE organisation_id = ? ' +
         '   AND day >= ?' +
@@ -200,7 +196,7 @@ router.get('/openinghours', function(req, res) {
     //console.log(req.params.organisatie_id);
     //console.log(req.params.channel_id);
 
-    dbConnection.query('SELECT * ' +
+    dbPool.query('SELECT * ' +
         'FROM opening_hours ' +
         '   WHERE day >= ?' +
         '   AND day <= ?' +
@@ -238,7 +234,7 @@ router.get('/open/:organisatie_id/:channel_id', function(req, res) {
     // console.log(huidigeDag);
     // console.log(req.params.organisatie_id);
     // console.log(req.params.channel_id);
-    dbConnection.query('SELECT count(id) as existing FROM opening_hours ' +
+    dbPool.query('SELECT count(id) as existing FROM opening_hours ' +
         'WHERE organisation_id = ?  AND channel_id = ?  AND day = ?  AND start_time <= ?  AND end_time >= ?',
         [
             req.params.organisatie_id,
@@ -284,7 +280,7 @@ router.get('/open/:organisatie_id', function(req, res) {
     // console.log(huidigeDag);
     // console.log(req.params.organisatie_id);
     // console.log(req.params.channel_id);
-    dbConnection.query('SELECT  channel_id, count(id) as existing FROM opening_hours ' +
+    dbPool.query('SELECT  channel_id, count(id) as existing FROM opening_hours ' +
         'WHERE organisation_id = ? AND day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY  channel_id',
         [
             req.params.organisatie_id,
@@ -335,7 +331,7 @@ router.get('/geopend', function(req, res) {
     // console.log(huidigeDag);
     // console.log(req.params.organisatie_id);
     // console.log(req.params.channel_id);
-    dbConnection.query('SELECT organisation_id , channel_id, count(id) as existing FROM opening_hours ' +
+    dbPool.query('SELECT organisation_id , channel_id, count(id) as existing FROM opening_hours ' +
         'WHERE day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY organisation_id, channel_id',
         [
             huidigeDag,
