@@ -69,15 +69,15 @@ function transformQueryResultsToOrgChannelDaysOutput(results){
         if(typeof $days[item.organisation_id].channels[item.channel_id] == 'undefined') {
             $days[item.organisation_id].channels[item.channel_id] = {
                 id: item.channel_id,
-                dates: {}
+                days: {}
             };
         }
         var formattedDate = formatDateFromJs(item.day);
         console.log(formattedDate);
-        if(typeof $days[item.organisation_id].channels[item.channel_id].dates[formattedDate] == 'undefined') {
-            $days[item.organisation_id].channels[item.channel_id].dates[formattedDate] = [];
+        if(typeof $days[item.organisation_id].channels[item.channel_id].days[formattedDate] == 'undefined') {
+            $days[item.organisation_id].channels[item.channel_id].days[formattedDate] = [];
         }
-        $days[item.organisation_id].channels[item.channel_id].dates[formattedDate].push({from:item.start_hour,to:item.end_hour});
+        $days[item.organisation_id].channels[item.channel_id].days[formattedDate].push({from:item.start_hour,to:item.end_hour});
     });
     return $days;
 }
@@ -87,12 +87,12 @@ function transformQueryResultsToChannelDaysOutput(results){
     results.forEach(function(item){
 
         if(typeof $days[item.channel_id] == 'undefined') {
-            $days[item.channel_id] = {};
+            $days[item.channel_id] = { id: item.channel_id, days: {}};
         }
-        if(typeof $days[item.channel_id][formatDateFromJs(item.day)] == 'undefined') {
-            $days[item.channel_id][formatDateFromJs(item.day)] = [];
+        if(typeof $days[item.channel_id].days[formatDateFromJs(item.day)] == 'undefined') {
+            $days[item.channel_id].days[formatDateFromJs(item.day)] = [];
         }
-        $days[item.channel_id][formatDateFromJs(item.day)].push({from:item.start_hour,to:item.end_hour});
+        $days[item.channel_id].days[formatDateFromJs(item.day)].push({from:item.start_hour,to:item.end_hour});
     });
     return $days;
 }
@@ -127,7 +127,8 @@ router.get('/openingsuren/:organisatie_id/:channel_id', function(req, res) {
         'WHERE organisation_id = ? ' +
         '   AND channel_id = ?' +
          '   AND day >= ?' +
-         '   AND day <= ?',
+         '   AND day <= ?' +
+        ' ORDER BY day ASC, start_hour ASC',
         [
             req.params.organisatie_id,
             req.params.channel_id,
@@ -163,7 +164,8 @@ router.get('/openingsuren/:organisatie_id', function(req, res) {
         'FROM opening_hours ' +
         'WHERE organisation_id = ? ' +
         '   AND day >= ?' +
-        '   AND day <= ?',
+        '   AND day <= ?' +
+        ' ORDER BY day ASC, start_hour ASC',
         [
             req.params.organisatie_id,
             datetimeFrom,
@@ -196,7 +198,8 @@ router.get('/openingsuren', function(req, res) {
     dbConnection.query('SELECT * ' +
         'FROM opening_hours ' +
         '   WHERE day >= ?' +
-        '   AND day <= ?',
+        '   AND day <= ?' +
+        'ORDER BY day ASC, start_hour ASC',
         [
             datetimeFrom,
             datetimeTo
