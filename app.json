@@ -1,0 +1,7 @@
+{
+  "name": "openingHours System",
+  "description": "Nodejs application using cleardb",
+  "repository": "https://github.com/wouters-frederik/opening_hours_api",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "express", "static", "api", "openinghours"]
+}
