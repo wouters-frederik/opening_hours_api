@@ -10,7 +10,7 @@ const https = require('https');
 const express = require('express');
 const port = process.env.PORT || 8080;
 const dbUrl = process.env.CLEARDB_DATABASE_URL || 'mysql://root:mysql@localhost/openinghours?reconnect=true';
-
+const path = require('path');
 const bodyParser = require('body-parser');
 
 var dbPool  = mysql.createPool(dbUrl);
@@ -27,6 +27,7 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.set('json spaces', 40);
+app.use(express.static( path.join(__dirname, 'public')));
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -374,11 +375,27 @@ router.get('/', function(req, res) {
 });
 
 
+
+var UIrouter = express.Router();
+UIrouter.get('/', function(req, res) {
+    res.sendfile('htmls/ingave.html');
+});
+UIrouter.get('/channels', function(req, res) {
+    res.sendfile('htmls/kanalen.html');
+});
+UIrouter.get('/organisations', function(req, res) {
+    res.sendfile('htmls/organisaties.html');
+});
+UIrouter.get('/login', function(req, res) {
+    res.sendfile('htmls/login.html');
+});
 // more routes for our API will happen here
+
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api/v1', router);
+app.use('/ui', UIrouter);
 
 // START THE SERVER
 // =============================================================================
