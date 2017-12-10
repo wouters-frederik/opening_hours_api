@@ -1,4 +1,4 @@
-# openingsuren api
+# opening hours api
 
 ## api
 
