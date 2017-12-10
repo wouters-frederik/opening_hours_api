@@ -36,7 +36,7 @@ var router = express.Router();              // get an instance of the express Ro
 
 
 //                 OPENINGSUREN
-function formatDate(today){
+function formatDateFromJs(today){
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
@@ -51,10 +51,15 @@ function formatDate(today){
     return yyyy + '-' + mm + '-' + dd;
 }
 
+//                 OPENINGSUREN
+function formatDateFromUnix(timestamp){
+    var today = new Date(timestamp * 1000);
+    return formatDateFromJs(today);
+}
+
 function transformQueryResultsToOrgChannelDaysOutput(results){
     var $days = {};
     results.forEach(function(item){
-        console.log(item);
         if(typeof $days[item.organisation_id] == 'undefined') {
             $days[item.organisation_id] = {
                 id: item.organisation_id,
@@ -67,7 +72,7 @@ function transformQueryResultsToOrgChannelDaysOutput(results){
                 dates: {}
             };
         }
-        var formattedDate = formatDate(item.day);
+        var formattedDate = formatDateFromJs(item.day);
         console.log(formattedDate);
         if(typeof $days[item.organisation_id].channels[item.channel_id].dates[formattedDate] == 'undefined') {
             $days[item.organisation_id].channels[item.channel_id].dates[formattedDate] = [];
@@ -80,14 +85,14 @@ function transformQueryResultsToOrgChannelDaysOutput(results){
 function transformQueryResultsToChannelDaysOutput(results){
     var $days = {};
     results.forEach(function(item){
-        //console.log(item);
+
         if(typeof $days[item.channel_id] == 'undefined') {
             $days[item.channel_id] = {};
         }
-        if(typeof $days[item.channel_id][formatDate(item.day)] == 'undefined') {
-            $days[item.channel_id][formatDate(item.day)] = [];
+        if(typeof $days[item.channel_id][formatDateFromJs(item.day)] == 'undefined') {
+            $days[item.channel_id][formatDateFromJs(item.day)] = [];
         }
-        $days[item.channel_id][formatDate(item.day)].push({from:item.start_hour,to:item.end_hour});
+        $days[item.channel_id][formatDateFromJs(item.day)].push({from:item.start_hour,to:item.end_hour});
     });
     return $days;
 }
@@ -96,10 +101,10 @@ function transformQueryResultsToDaysOutput(results){
     var $days = {};
     results.forEach(function(item){
         //console.log(item);
-        if(typeof $days[formatDate(item.day)] == 'undefined') {
-            $days[formatDate(item.day)] = [];
+        if(typeof $days[formatDateFromJs(item.day)] == 'undefined') {
+            $days[formatDateFromJs(item.day)] = [];
         }
-        $days[formatDate(item.day)].push({from:item.start_hour,to:item.end_hour});
+        $days[formatDateFromJs(item.day)].push({from:item.start_hour,to:item.end_hour});
     });
     return $days;
 }
@@ -107,15 +112,15 @@ function transformQueryResultsToDaysOutput(results){
 
 router.get('/openingsuren/:organisatie_id/:channel_id', function(req, res) {
     //req.params.organisatie_id
-    var datetimeFrom = req.params.from || formatDate(new Date());
+    var datetimeFrom = req.params.from || formatDateFromJs(new Date());
     var todate = new Date();
     todate.setDate(todate.getDate() + 7);
-    var datetimeTo = req.params.to || formatDate(todate);
+    var datetimeTo = req.params.to || formatDateFromJs(todate);
 
-    console.log(datetimeTo);
-    console.log(datetimeFrom);
-    console.log(req.params.organisatie_id);
-    console.log(req.params.channel_id);
+    // console.log(datetimeTo);
+    // console.log(datetimeFrom);
+    // console.log(req.params.organisatie_id);
+    // console.log(req.params.channel_id);
 
     dbConnection.query('SELECT * ' +
         'FROM opening_hours ' +
@@ -133,7 +138,7 @@ router.get('/openingsuren/:organisatie_id/:channel_id', function(req, res) {
         //console.log(typeof error);
         if (!error) {
             var $days = transformQueryResultsToDaysOutput(results);
-            console.log($days);
+            //console.log($days);
             res.json({ days: $days });
 
         }
@@ -144,15 +149,15 @@ router.get('/openingsuren/:organisatie_id/:channel_id', function(req, res) {
 });
 router.get('/openingsuren/:organisatie_id', function(req, res) {
     //req.params.organisatie_id
-    var datetimeFrom = req.params.from || formatDate(new Date());
+    var datetimeFrom = req.params.from || formatDateFromJs(new Date());
     var todate = new Date();
     todate.setDate(todate.getDate() + 7);
-    var datetimeTo = req.params.to || formatDate(todate);
+    var datetimeTo = req.params.to || formatDateFromJs(todate);
 
-    console.log(datetimeTo);
-    console.log(datetimeFrom);
-    console.log(req.params.organisatie_id);
-    console.log(req.params.channel_id);
+    // console.log(datetimeTo);
+    // console.log(datetimeFrom);
+    // console.log(req.params.organisatie_id);
+    // console.log(req.params.channel_id);
 
     dbConnection.query('SELECT * ' +
         'FROM opening_hours ' +
@@ -168,7 +173,7 @@ router.get('/openingsuren/:organisatie_id', function(req, res) {
             //console.log(typeof error);
             if (!error) {
                 var $channels = transformQueryResultsToChannelDaysOutput(results);
-                console.log($channels);
+                //console.log($channels);
                 res.json({ channels: $channels });
 
             }
@@ -178,13 +183,13 @@ router.get('/openingsuren/:organisatie_id', function(req, res) {
         });
 });
 router.get('/openingsuren', function(req, res) {
-    var datetimeFrom = req.params.from || formatDate(new Date());
+    var datetimeFrom = req.params.from || formatDateFromJs(new Date());
     var todate = new Date();
     todate.setDate(todate.getDate() + 7);
-    var datetimeTo = req.params.to || formatDate(todate);
+    var datetimeTo = req.params.to || formatDateFromJs(todate);
 
-    console.log(datetimeTo);
-    console.log(datetimeFrom);
+    // console.log(datetimeTo);
+    // console.log(datetimeFrom);
     //console.log(req.params.organisatie_id);
     //console.log(req.params.channel_id);
 
@@ -200,7 +205,7 @@ router.get('/openingsuren', function(req, res) {
             //console.log(typeof error);
             if (!error) {
                 var $channels = transformQueryResultsToOrgChannelDaysOutput(results);
-                console.log($channels);
+                //console.log($channels);
                 res.json({ organisations: $channels });
 
             }
@@ -211,21 +216,150 @@ router.get('/openingsuren', function(req, res) {
 });
 
 
-//                  GEOPEND
 
+
+
+//                  GEOPEND
 router.get('/geopend/:organisatie_id/:channel_id', function(req, res) {
     //req.params.organisatie_id
     //req.params.channel_id
     //optionele url parameter: timestamp (toon status on timestamp).
-    res.json({ message: 'toon indien geopend status (voor org & channel) ' });
+    var datetime = req.params.timestamp || Math.floor(Date.now() / 1000);
+    var huidigeDag = formatDateFromUnix(datetime);
+    // console.log(datetime);
+    // console.log(huidigeDag);
+    // console.log(req.params.organisatie_id);
+    // console.log(req.params.channel_id);
+    dbConnection.query('SELECT count(id) as existing FROM opening_hours ' +
+        'WHERE organisation_id = ?  AND channel_id = ?  AND day = ?  AND start_hour <= ?  AND end_hour >= ?',
+        [
+            req.params.organisatie_id,
+            req.params.channel_id,
+            huidigeDag,
+            datetime,
+            datetime
+        ],
+        function (error, results) {
+            var $geopend = false;
+            if (error) {
+                //console.log(error);
+            }else{
+                //console.log('FOUND:');
+                //console.log(results[0].existing);
+                if(results[0].existing == 0){
+                    //do nothing
+                    $geopend = false;
+                }
+                if(results[0].existing == 1 || results[0].existing > 1) {
+                    $geopend = true;
+                }
+            }
+            res.json({ geopend: $geopend });
+            // error will be an Error if one occurred during the query
+            // results will contain the results of the query
+            // fields will contain information about the returned results fields (if any)
+        });
 });
+
+
+router.get('/geopend/:organisatie_id', function(req, res) {
+    //req.params.organisatie_id
+    //req.params.channel_id
+    //optionele url parameter: timestamp (toon status on timestamp).
+
+    //req.params.organisatie_id
+    //req.params.channel_id
+    //optionele url parameter: timestamp (toon status on timestamp).
+    var datetime = req.params.timestamp || Math.floor(Date.now() / 1000);
+    var huidigeDag = formatDateFromUnix(datetime);
+    // console.log(datetime);
+    // console.log(huidigeDag);
+    // console.log(req.params.organisatie_id);
+    // console.log(req.params.channel_id);
+    dbConnection.query('SELECT  channel_id, count(id) as existing FROM opening_hours ' +
+        'WHERE organisation_id = ? AND day = ?  AND start_hour <= ?  AND end_hour >= ? GROUP BY  channel_id',
+        [
+            req.params.organisatie_id,
+            huidigeDag,
+            datetime,
+            datetime
+        ],
+        function (error, results) {
+            var $geopend = false;
+            if (error) {
+                console.log(error);
+            }else{
+                // console.log('FOUND:');
+                // console.log(results);
+                var $outputArray = {};
+
+                results.forEach(function(item){
+
+                    if(typeof $outputArray[item.channel_id] == 'undefined') {
+                        $outputArray[item.channel_id] = {
+                            channel_id: item.channel_id,
+                            geopend: (item.existing > 0)? true : false
+                        };
+                    }
+                });
+            }
+            res.json({ channels: $outputArray });
+            // error will be an Error if one occurred during the query
+            // results will contain the results of the query
+            // fields will contain information about the returned results fields (if any)
+        });
+});
+
 
 //voor intern gebruik _ overzichtpagina
 router.get('/geopend', function(req, res) {
     //req.params.organisatie_id
     //req.params.channel_id
     //optionele url parameter: timestamp (toon status on timestamp).
-    res.json({ message: 'show array of organisaties, kanalen en hun geopend status (voor org' });
+    //SELECT organisation_id , channel_id, count(id) as existing  FROM opening_hours WHERE day = '2017-12-10'  AND start_hour <= 1512915217 AND end_hour >= 1512915217 GROUP BY organisation_id, channel_id
+
+    //req.params.organisatie_id
+    //req.params.channel_id
+    //optionele url parameter: timestamp (toon status on timestamp).
+    var datetime = req.params.timestamp || Math.floor(Date.now() / 1000);
+    var huidigeDag = formatDateFromUnix(datetime);
+    // console.log(datetime);
+    // console.log(huidigeDag);
+    // console.log(req.params.organisatie_id);
+    // console.log(req.params.channel_id);
+    dbConnection.query('SELECT organisation_id , channel_id, count(id) as existing FROM opening_hours ' +
+        'WHERE day = ?  AND start_hour <= ?  AND end_hour >= ? GROUP BY organisation_id, channel_id',
+        [
+            huidigeDag,
+            datetime,
+            datetime
+        ],
+        function (error, results) {
+            var $geopend = false;
+            if (error) {
+                console.log(error);
+            }else{
+                // console.log('FOUND:');
+                // console.log(results);
+                var $outputArray = {};
+
+                results.forEach(function(item){
+                    if(typeof $outputArray[item.organisation_id] == 'undefined') {
+                        $outputArray[item.organisation_id] = {organisation_id: item.organisation_id, channels: {}};
+                    }
+                    if(typeof $outputArray[item.organisation_id].channels[item.channel_id] == 'undefined') {
+                        $outputArray[item.organisation_id].channels[item.channel_id] = {
+                            channel_id: item.channel_id,
+                            geopend: (item.existing > 0)? true : false
+                        };
+                    }
+                });
+            }
+            res.json({ organisations: $outputArray });
+            // error will be an Error if one occurred during the query
+            // results will contain the results of the query
+            // fields will contain information about the returned results fields (if any)
+        });
 });
 
 
