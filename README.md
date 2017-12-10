@@ -1,5 +1,7 @@
 # Opening hours api
 
+ :exclamation:  :exclamation: NOT PRODUCTION READY YET  :exclamation: :exclamation:
+
 ## Installation
 
 ### local
