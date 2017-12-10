@@ -2,6 +2,8 @@
 CREATE TABLE `channels` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
+  `created` bigint(11) DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
@@ -23,5 +25,7 @@ CREATE TABLE `organisations` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `remote_id` varchar(255) DEFAULT NULL,
+  `created` bigint(11) DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;

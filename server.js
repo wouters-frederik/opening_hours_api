@@ -24,12 +24,73 @@ app.use(bodyParser.json());
 app.set('json spaces', 40);
 app.use(express.static( path.join(__dirname, 'public')));
 
+loadChannels();
+loadOrganisations();
 
 
 
 
 /////////////////////////HELPER FUNCTIONS
 
+function loadOrganisations(){
+    dbPool.query('SELECT * FROM organisations WHERE 1 ORDER BY name ASC', [],
+        function (error, results, fields) {
+            //console.log(typeof error);
+            if (!error) {
+                var $orgs = {};
+                console.log(results);
+                var organisations = {};
+                global.organisations = results;
+            }
+            // error will be an Error if one occurred during the query
+            // results will contain the results of the query
+            // fields will contain information about the returned results fields (if any)
+        });
+}
+function loadChannels(){
+    dbPool.query('SELECT * FROM channels WHERE 1 ORDER BY name ASC', [],
+        function (error, results, fields) {
+            //console.log(typeof error);
+            if (!error) {
+                console.log(results);
+                global.channels = results;
+            }
+            // error will be an Error if one occurred during the query
+            // results will contain the results of the query
+            // fields will contain information about the returned results fields (if any)
+        });
+}
+function loadChannel(searchId){
+    global.channels.forEach(function(item){
+        if (item.id == searchId) {
+            return item;
+        }
+    })
+}
+function loadChannelByOrganisation(searchId){
+    var $channels = [];
+    console.log(global.channels);
+    global.channels.forEach(function(item){
+        if (item.organisation_id == searchId) {
+            $channels.push(item);
+        }
+    });
+    console.log('CHANNELS FOUND');
+    console.log($channels);
+    return $channels;
+}
+
+function loadOrganisation(searchId){
+    console.log('loadOrgs');
+    console.log(global.organisations);
+    var $organisation = {};
+    global.organisations.forEach(function(item,index){
+        if (item.id == searchId) {
+            $organisation =  item;
+        }
+    });
+    return $organisation;
+}
 
 
 //                 OPENINGSUREN
@@ -368,6 +429,29 @@ router.get('/open', function(req, res) {
             // fields will contain information about the returned results fields (if any)
         });
 });
+
+
+//voor intern gebruik _ overzichtpagina
+router.get('/organisations', function(req, res) {
+
+    res.json({ organisations: global.organisations });
+
+});
+router.get('/organisations/:organisation_id', function(req, res) {
+    var $organisation = loadOrganisation(req.params.organisation_id);
+    console.log($organisation);
+    res.json({ organisation: $organisation });
+
+});
+
+//voor intern gebruik _ overzichtpagina
+router.get('/channels', function(req, res) {
+
+    res.json({ channels: global.channels });
+
+});
+
+
 
 
 router.get('/', function(req, res) {
