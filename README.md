@@ -4,12 +4,18 @@
 
 ## Installation
 
+### local
 1. git clone this repository
 2. (install npm)
 3. npm install
 4. (install mysql file into your mysql)
 5. Set your db credentials
 6. run node server.js
+
+### heroku
+1. press the button above.
+2. add clearDB to your heroku application
+3. upload the mysql file in the ClearDB instance
 
 ## API
 
