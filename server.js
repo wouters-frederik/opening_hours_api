@@ -10,7 +10,7 @@ const https = require('https');
 const express = require('express');
 const port = process.env.PORT || 8080;
 const dbUrl = process.env.CLEARDB_DATABASE_URL || 'mysql://root:mysql@localhost/openinghours?reconnect=true';
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
 
 var dbConnection = mysql.createConnection(dbUrl);
