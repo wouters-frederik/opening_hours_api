@@ -115,7 +115,7 @@ function transformQueryResultsToDaysOutput(results){
 }
 
 
-router.get('/openingsuren/:organisatie_id/:channel_id', function(req, res) {
+router.get('/openinghours/:organisatie_id/:channel_id', function(req, res) {
     //req.params.organisatie_id
     var datetimeFrom = req.params.from || formatDateFromJs(new Date());
     var todate = new Date();
@@ -153,7 +153,7 @@ router.get('/openingsuren/:organisatie_id/:channel_id', function(req, res) {
         // fields will contain information about the returned results fields (if any)
     });
 });
-router.get('/openingsuren/:organisatie_id', function(req, res) {
+router.get('/openinghours/:organisatie_id', function(req, res) {
     //req.params.organisatie_id
     var datetimeFrom = req.params.from || formatDateFromJs(new Date());
     var todate = new Date();
@@ -189,7 +189,7 @@ router.get('/openingsuren/:organisatie_id', function(req, res) {
             // fields will contain information about the returned results fields (if any)
         });
 });
-router.get('/openingsuren', function(req, res) {
+router.get('/openinghours', function(req, res) {
     var datetimeFrom = req.params.from || formatDateFromJs(new Date());
     var todate = new Date();
     todate.setDate(todate.getDate() + 7);
@@ -228,7 +228,7 @@ router.get('/openingsuren', function(req, res) {
 
 
 //                  GEOPEND
-router.get('/geopend/:organisatie_id/:channel_id', function(req, res) {
+router.get('/open/:organisatie_id/:channel_id', function(req, res) {
     //req.params.organisatie_id
     //req.params.channel_id
     //optionele url parameter: timestamp (toon status on timestamp).
@@ -270,7 +270,7 @@ router.get('/geopend/:organisatie_id/:channel_id', function(req, res) {
 });
 
 
-router.get('/geopend/:organisatie_id', function(req, res) {
+router.get('/open/:organisatie_id', function(req, res) {
     //req.params.organisatie_id
     //req.params.channel_id
     //optionele url parameter: timestamp (toon status on timestamp).
