@@ -82,7 +82,7 @@ function transformQueryResultsToOrgChannelDaysOutput(results){
         if(typeof $days[item.organisation_id].channels[item.channel_id].days[formattedDate] == 'undefined') {
             $days[item.organisation_id].channels[item.channel_id].days[formattedDate] = [];
         }
-        $days[item.organisation_id].channels[item.channel_id].days[formattedDate].push({from:item.start_hour,to:item.end_hour});
+        $days[item.organisation_id].channels[item.channel_id].days[formattedDate].push({from:item.start_time,to:item.end_time});
     });
     return $days;
 }
@@ -97,7 +97,7 @@ function transformQueryResultsToChannelDaysOutput(results){
         if(typeof $days[item.channel_id].days[formatDateFromJs(item.day)] == 'undefined') {
             $days[item.channel_id].days[formatDateFromJs(item.day)] = [];
         }
-        $days[item.channel_id].days[formatDateFromJs(item.day)].push({from:item.start_hour,to:item.end_hour});
+        $days[item.channel_id].days[formatDateFromJs(item.day)].push({from:item.start_time,to:item.end_time});
     });
     return $days;
 }
@@ -109,7 +109,7 @@ function transformQueryResultsToDaysOutput(results){
         if(typeof $days[formatDateFromJs(item.day)] == 'undefined') {
             $days[formatDateFromJs(item.day)] = [];
         }
-        $days[formatDateFromJs(item.day)].push({from:item.start_hour,to:item.end_hour});
+        $days[formatDateFromJs(item.day)].push({from:item.start_time,to:item.end_time});
     });
     return $days;
 }
@@ -133,7 +133,7 @@ router.get('/openingsuren/:organisatie_id/:channel_id', function(req, res) {
         '   AND channel_id = ?' +
          '   AND day >= ?' +
          '   AND day <= ?' +
-        ' ORDER BY day ASC, start_hour ASC',
+        ' ORDER BY day ASC, start_time ASC',
         [
             req.params.organisatie_id,
             req.params.channel_id,
@@ -170,7 +170,7 @@ router.get('/openingsuren/:organisatie_id', function(req, res) {
         'WHERE organisation_id = ? ' +
         '   AND day >= ?' +
         '   AND day <= ?' +
-        ' ORDER BY day ASC, start_hour ASC',
+        ' ORDER BY day ASC, start_time ASC',
         [
             req.params.organisatie_id,
             datetimeFrom,
@@ -204,7 +204,7 @@ router.get('/openingsuren', function(req, res) {
         'FROM opening_hours ' +
         '   WHERE day >= ?' +
         '   AND day <= ?' +
-        'ORDER BY day ASC, start_hour ASC',
+        'ORDER BY day ASC, start_time ASC',
         [
             datetimeFrom,
             datetimeTo
@@ -239,7 +239,7 @@ router.get('/geopend/:organisatie_id/:channel_id', function(req, res) {
     // console.log(req.params.organisatie_id);
     // console.log(req.params.channel_id);
     dbConnection.query('SELECT count(id) as existing FROM opening_hours ' +
-        'WHERE organisation_id = ?  AND channel_id = ?  AND day = ?  AND start_hour <= ?  AND end_hour >= ?',
+        'WHERE organisation_id = ?  AND channel_id = ?  AND day = ?  AND start_time <= ?  AND end_time >= ?',
         [
             req.params.organisatie_id,
             req.params.channel_id,
@@ -285,7 +285,7 @@ router.get('/geopend/:organisatie_id', function(req, res) {
     // console.log(req.params.organisatie_id);
     // console.log(req.params.channel_id);
     dbConnection.query('SELECT  channel_id, count(id) as existing FROM opening_hours ' +
-        'WHERE organisation_id = ? AND day = ?  AND start_hour <= ?  AND end_hour >= ? GROUP BY  channel_id',
+        'WHERE organisation_id = ? AND day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY  channel_id',
         [
             req.params.organisatie_id,
             huidigeDag,
@@ -324,7 +324,7 @@ router.get('/geopend', function(req, res) {
     //req.params.organisatie_id
     //req.params.channel_id
     //optionele url parameter: timestamp (toon status on timestamp).
-    //SELECT organisation_id , channel_id, count(id) as existing  FROM opening_hours WHERE day = '2017-12-10'  AND start_hour <= 1512915217 AND end_hour >= 1512915217 GROUP BY organisation_id, channel_id
+    //SELECT organisation_id , channel_id, count(id) as existing  FROM opening_hours WHERE day = '2017-12-10'  AND start_time <= 1512915217 AND end_time >= 1512915217 GROUP BY organisation_id, channel_id
 
     //req.params.organisatie_id
     //req.params.channel_id
@@ -336,7 +336,7 @@ router.get('/geopend', function(req, res) {
     // console.log(req.params.organisatie_id);
     // console.log(req.params.channel_id);
     dbConnection.query('SELECT organisation_id , channel_id, count(id) as existing FROM opening_hours ' +
-        'WHERE day = ?  AND start_hour <= ?  AND end_hour >= ? GROUP BY organisation_id, channel_id',
+        'WHERE day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY organisation_id, channel_id',
         [
             huidigeDag,
             datetime,
