@@ -1,14 +1,18 @@
 {
   "name": "node-api",
   "main": "server.js",
+  "scripts": {
+    "dev": "nodemon"
+  },
   "dependencies": {
     "axios": "^0.16.2",
-    "send": "0.11.1",
     "body-parser": "~1.0.1",
     "express": "~4.0.0",
+    "express-handlebars": "^3.0.0",
     "mongoose": "~3.6.13",
     "mysql": "^2.15.0",
     "path": "^0.12.7",
-    "qs": "1.0.0"
+    "qs": "1.0.0",
+    "send": "0.11.1"
   }
 }
