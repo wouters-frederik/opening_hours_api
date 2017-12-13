@@ -6,7 +6,6 @@ require('datejs');
 var protectedRouter = express.Router();
 
 
-
 // HTML endpoints
 protectedRouter.get('/', function (req, res) {
   //if param does not exist//
@@ -21,9 +20,8 @@ protectedRouter.get('/', function (req, res) {
         res.end();
     }else{
         var $startofweekString = req.query.week;
-
         var $startofweek = new Date($startofweekString);
-
+        var formattedVandaag = new Date().toString('yyyy-MM-dd');
         var $startNextWeek = $startofweek.clone().add(7).days();
         console.log('$startofweek');
         console.log($startofweek);
@@ -40,44 +38,53 @@ protectedRouter.get('/', function (req, res) {
             monday:{
                 date: $startofweek,
                 formattedDate: $startofweek.toString('yyyy-MM-dd'),
-                title: "monday"
+                title: "monday",
+                vandaagClass: (Date.today().toString('yyyy-MM-dd') == $startofweek.toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             tuesday:{
                 formattedDate: $startofweek.clone().add(1).days().toString('yyyy-MM-dd'),
                 date: $startofweek.clone().add(1).days(),
-                title: "tuesday"
+                title: "tuesday",
+                vandaagClass: (Date.today().toString('yyyy-MM-dd') == $startofweek.clone().add(1).days().toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             wednesday:{
                 formattedDate: $startofweek.clone().add(2).days().toString('yyyy-MM-dd'),
                 date: $startofweek.clone().add(2).days(),
-                title: "wednesday"
+                title: "wednesday",
+                vandaagClass: (Date.today().toString('yyyy-MM-dd') == $startofweek.clone().add(2).days().toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             thursday:{
                 formattedDate: $startofweek.clone().add(3).days().toString('yyyy-MM-dd'),
                 date: $startofweek.clone().add(3).days(),
-                title: "thursday"
+                title: "thursday",
+                vandaagClass: (Date.today().toString('yyyy-MM-dd') == $startofweek.clone().add(3).days().toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             friday:{
-                formattedDate: $startofweek.clone().add(3).days().toString('yyyy-MM-dd'),
-                date: $startofweek.clone().add(3).days(),
-                title: "friday"
+                formattedDate: $startofweek.clone().add(4).days().toString('yyyy-MM-dd'),
+                date: $startofweek.clone().add(4).days(),
+                title: "friday",
+                vandaagClass: (Date.today().toString('yyyy-MM-dd') == $startofweek.clone().add(4).days().toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             saturday:{
-                formattedDate: $startofweek.clone().add(3).days().toString('yyyy-MM-dd'),
-                date: $startofweek.clone().add(3).days(),
-                title: "saturday"
+                formattedDate: $startofweek.clone().add(5).days().toString('yyyy-MM-dd'),
+                date: $startofweek.clone().add(5).days(),
+                title: "saturday",
+                vandaagClass: (Date.today().toString('yyyy-MM-dd') == $startofweek.clone().add(5).days().toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             sunday:{
-                formattedDate: $startofweek.clone().add(3).days().toString('yyyy-MM-dd'),
-                date: $startofweek.clone().add(3).days(),
-                title: "sunday"
+                formattedDate: $startofweek.clone().add(6).days().toString('yyyy-MM-dd'),
+                date: $startofweek.clone().add(6).days(),
+                title: "sunday",
+                vandaagClass: (Date.today().toString('yyyy-MM-dd') == $startofweek.clone().add(6).days().toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
+
             }
         };
         var weekNav = {
           prevLink: '?week=' + $startPrevWeek.toISOString(),
           nextLink: '?week=' + $startNextWeek.toISOString(),
             curWeekTextString: curWeekText,
-            weekdays: weekdays
+            weekdays: weekdays,
+            formattedVandaag: formattedVandaag
 
         };
         console.log(weekNav);

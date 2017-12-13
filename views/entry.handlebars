@@ -55,7 +55,7 @@
           </div>
         </div>
 
-        <div class="form-group days">
+        <div class="form-group days" id="days">
 
 
           <!-- PER DAG -->
@@ -63,9 +63,11 @@
 
 
             {{#each weekdays}}
+
                 <div
-                        class="day border border-secondary rounded"
+                        class="day border border-secondary rounded {{vandaagClass}}"
                         style="padding:1em;"
+
                         data-dayofweek="0"
                         data-calendarday="2017-12-31"
                         data- organisatieId="1"
@@ -73,13 +75,12 @@
                 >
                     <h5>{{title}} - {{formattedDate}}</h5>
                     <div class="timeslots">
-                      <span class="">08:12 - 13:30
-                            <a href="javascript://"><i class="fa fa-times" aria-hidden="true"></i></a>
+                      <span class="">08:12 - 13:30 <a href="javascript://"><i class="fa fa-times" aria-hidden="true"></i></a>
                       </span>
                     </div>
 
                     <div class="input-group invoer-nieuwe">
-                        <input data-timepicker type="text" class="form-control" aria-label="starting hour" placeholder="08:00">
+                        <input type="text" class="form-control" aria-label="starting hour" placeholder="08:00">
                         <input type="text" class="form-control" aria-label="end hour" placeholder="22:00">
                         <span class="input-group-addon">+</span>
                     </div>
