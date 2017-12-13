@@ -98,16 +98,20 @@ On the overview page one can
 
 ## datastructure
 
-### organisation
+### entity
 
 - ID
 - name
 - link to remote source
+- created (timestamp)
+- created_by (user_id)
 
 ### channel
 
 - ID
 - name
+- created (timestamp)
+- created_by (user_id)
 
 ### opening_hours
 
@@ -117,3 +121,23 @@ On the overview page one can
 - day (2017-12-31)
 - start_time (timestamp)
 - end_time (timestamp)
+- created (timestamp)
+- created_by (user_id)
+
+
+### user
+
+- ID
+- name
+- email
+- password (hashed + salted)
+- created (timestamp)
+- created_by (user_id)
+
+### log
+
+- ID
+- user_id
+- action
+- reference (channel/entity/opening_hous)
+- value (serialized objects)
