@@ -1,6 +1,7 @@
 // Require modules
 const express = require('express');
 const helper = require('./../../controllers/helper');
+const dbPool = require('../../controllers/db');
 
 // Setup router for public
 var router = express.Router();              // get an instance of the express Router
