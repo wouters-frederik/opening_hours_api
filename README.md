@@ -62,7 +62,7 @@ url parameters
 * timestamp: the timestamp to check if channels are opened (defaults to NOW)
 
 #### GET /api/v1/open
-Retrieves the open channels for all entities grouped per organisation
+Retrieves the open channels for all entities grouped per entity
 
 url parameters
 * timestamp: the timestamp to check if channels are opened (defaults to NOW)
@@ -78,7 +78,7 @@ Show the entity detail
 
 ## editing
 
-### organisations
+### entities
 On the overview page "entities" you can add/edit the system's entities.
 Each entity has a set of channels (phone/email/...)
 
