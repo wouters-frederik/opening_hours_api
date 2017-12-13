@@ -18,15 +18,13 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 // Initialize DB connection
-require('./controllers/db');
-
+const dbPool = require('./controllers/db');
 // Require controllers
 const channel = require('./controllers/channel');
-const organisation = require('./controllers/organisation');
+const entity = require('./controllers/entity');
 
 channel.loadChannels();
-//loadChannels();
-//loadOrganisations();
+console.log('FINITO');
 
 // Setup and register routes
 var publicRouter = require('./middleware/routes/public');

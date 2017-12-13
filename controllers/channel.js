@@ -6,6 +6,7 @@ function loadChannels () {
     function (error, results, fields) {
       //console.log(typeof error);
       if (!error) {
+        console.log('channels loaded');
         console.log(results);
         global.channels = results;
       } else {
@@ -25,11 +26,11 @@ function loadChannel (searchId) {
   })
 }
 
-function loadChannelByOrganisation (searchId) {
+function loadChannelByEntity (searchId) {
   var $channels = [];
   console.log(global.channels);
   global.channels.forEach(function (item) {
-    if (item.organisation_id == searchId) {
+    if (item.entity_id == searchId) {
       $channels.push(item);
     }
   });
@@ -41,5 +42,5 @@ function loadChannelByOrganisation (searchId) {
 module.exports = {
   loadChannels: loadChannels,
   loadChannel: loadChannel,
-  loadChannelByOrganisation: loadChannelByOrganisation
+  loadChannelByEntity: loadChannelByEntity
 }

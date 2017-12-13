@@ -1,18 +1,19 @@
-module.exports = {
-  formatDateFromJs: function (today) {
+formatDateFromJs =  function (today) {
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
     var yyyy = today.getFullYear();
 
     if (dd < 10) {
-      dd = '0' + dd
+        dd = '0' + dd
     }
 
     if (mm < 10) {
-      mm = '0' + mm
+        mm = '0' + mm
     }
     return yyyy + '-' + mm + '-' + dd;
-  },
+}
+module.exports = {
+    formatDateFromJs: formatDateFromJs,
   formatDateFromUnix: function (timestamp) {
     var today = new Date(timestamp * 1000);
     return formatDateFromJs(today);
@@ -20,24 +21,24 @@ module.exports = {
   transformQueryResultsToOrgChannelDaysOutput: function (results) {
     var $days = {};
     results.forEach(function (item) {
-      if (typeof $days[item.organisation_id] == 'undefined') {
-        $days[item.organisation_id] = {
-          id: item.organisation_id,
+      if (typeof $days[item.entity_id] == 'undefined') {
+        $days[item.entity_id] = {
+          id: item.entity_id,
           channels: {}
         };
       }
-      if (typeof $days[item.organisation_id].channels[item.channel_id] == 'undefined') {
-        $days[item.organisation_id].channels[item.channel_id] = {
+      if (typeof $days[item.entity_id].channels[item.channel_id] == 'undefined') {
+        $days[item.entity_id].channels[item.channel_id] = {
           id: item.channel_id,
           days: {}
         };
       }
       var formattedDate = formatDateFromJs(item.day);
       console.log(formattedDate);
-      if (typeof $days[item.organisation_id].channels[item.channel_id].days[formattedDate] == 'undefined') {
-        $days[item.organisation_id].channels[item.channel_id].days[formattedDate] = [];
+      if (typeof $days[item.entity_id].channels[item.channel_id].days[formattedDate] == 'undefined') {
+        $days[item.entity_id].channels[item.channel_id].days[formattedDate] = [];
       }
-      $days[item.organisation_id].channels[item.channel_id].days[formattedDate].push({
+      $days[item.entity_id].channels[item.channel_id].days[formattedDate].push({
         from: item.start_time,
         to: item.end_time
       });
