@@ -3,6 +3,7 @@ const express = require('express');
 const port = process.env.PORT || 8080;
 const path = require('path');
 const bodyParser = require('body-parser');
+require('datejs')
 
 var exphbs = require('express-handlebars');
 
@@ -23,8 +24,10 @@ const dbPool = require('./controllers/db');
 const channel = require('./controllers/channel');
 const entity = require('./controllers/entity');
 
+console.log('Load channels and entities');
 channel.loadChannels();
-console.log('FINITO');
+entity.loadEntities();
+console.log('Loaded in memory.');
 
 // Setup and register routes
 var publicRouter = require('./middleware/routes/public');

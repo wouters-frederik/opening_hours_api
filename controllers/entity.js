@@ -18,7 +18,7 @@ function loadEntities () {
     });
 }
 
-function loadEntity (searchId) {
+function loadEntity(searchId) {
   console.log('loadEntities');
   console.log(global.entities);
   var $entity = {};

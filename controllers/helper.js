@@ -11,9 +11,26 @@ formatDateFromJs =  function (today) {
         mm = '0' + mm
     }
     return yyyy + '-' + mm + '-' + dd;
+};
+
+function subtractDays(date, numDays) {
+    var res = date.setTime(date.getTime() - (numDays * 24 * 60 * 60 * 1000));
+    return new Date(res);
 }
+function addDays(date, numDays) {
+    var res = date.setTime(date.getTime() + (numDays * 24 * 60 * 60 * 1000));
+    return new Date(res);
+}
+function getMonday(d) {
+    var day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+    return new Date(d.setDate(diff));
+}
+
 module.exports = {
     formatDateFromJs: formatDateFromJs,
+    addDays:addDays,
+    subtractDays:subtractDays,
+    getMonday:getMonday,
   formatDateFromUnix: function (timestamp) {
     var today = new Date(timestamp * 1000);
     return formatDateFromJs(today);

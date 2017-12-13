@@ -2,7 +2,7 @@
 const express = require('express');
 const helper = require('./../../controllers/helper');
 const dbPool = require('../../controllers/db');
-
+const entity = require ('../../controllers/entity');
 // Setup router for public
 var router = express.Router();              // get an instance of the express Router
 
@@ -105,7 +105,7 @@ router.get('/openinghours', function (req, res) {
       if (!error) {
         var $channels = helper.transformQueryResultsToOrgChannelDaysOutput(results);
         //console.log($channels);
-        res.json({organisations: $channels});
+        res.json({entities: $channels});
 
       }
       // error will be an Error if one occurred during the query
@@ -127,7 +127,7 @@ router.get('/open/:organisatie_id/:channel_id', function (req, res) {
   // console.log(req.params.organisatie_id);
   // console.log(req.params.channel_id);
   dbPool.query('SELECT count(id) as existing FROM opening_hours ' +
-    'WHERE organisation_id = ?  AND channel_id = ?  AND day = ?  AND start_time <= ?  AND end_time >= ?',
+    'WHERE entity_id = ?  AND channel_id = ?  AND day = ?  AND start_time <= ?  AND end_time >= ?',
     [
       req.params.organisatie_id,
       req.params.channel_id,
@@ -172,7 +172,7 @@ router.get('/open/:organisatie_id', function (req, res) {
   // console.log(req.params.organisatie_id);
   // console.log(req.params.channel_id);
   dbPool.query('SELECT  channel_id, count(id) as existing FROM opening_hours ' +
-    'WHERE organisation_id = ? AND day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY  channel_id',
+    'WHERE entity_id = ? AND day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY  channel_id',
     [
       req.params.organisatie_id,
       huidigeDag,
@@ -210,7 +210,7 @@ router.get('/open', function (req, res) {
   //req.params.organisatie_id
   //req.params.channel_id
   //optionele url parameter: timestamp (toon status on timestamp).
-  //SELECT organisation_id , channel_id, count(id) as existing  FROM opening_hours WHERE day = '2017-12-10'  AND start_time <= 1512915217 AND end_time >= 1512915217 GROUP BY organisation_id, channel_id
+  //SELECT entity_id , channel_id, count(id) as existing  FROM opening_hours WHERE day = '2017-12-10'  AND start_time <= 1512915217 AND end_time >= 1512915217 GROUP BY entity_id, channel_id
 
   //req.params.organisatie_id
   //req.params.channel_id
@@ -221,8 +221,8 @@ router.get('/open', function (req, res) {
   // console.log(huidigeDag);
   // console.log(req.params.organisatie_id);
   // console.log(req.params.channel_id);
-  dbPool.query('SELECT organisation_id , channel_id, count(id) as existing FROM opening_hours ' +
-    'WHERE day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY organisation_id, channel_id',
+  dbPool.query('SELECT entity_id , channel_id, count(id) as existing FROM opening_hours ' +
+    'WHERE day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY entity_id, channel_id',
     [
       huidigeDag,
       datetime,
@@ -238,18 +238,18 @@ router.get('/open', function (req, res) {
         var $outputArray = {};
 
         results.forEach(function (item) {
-          if (typeof $outputArray[item.organisation_id] == 'undefined') {
-            $outputArray[item.organisation_id] = {organisation_id: item.organisation_id, channels: {}};
+          if (typeof $outputArray[item.entity_id] == 'undefined') {
+            $outputArray[item.entity_id] = {entity_id: item.entity_id, channels: {}};
           }
-          if (typeof $outputArray[item.organisation_id].channels[item.channel_id] == 'undefined') {
-            $outputArray[item.organisation_id].channels[item.channel_id] = {
+          if (typeof $outputArray[item.entity_id].channels[item.channel_id] == 'undefined') {
+            $outputArray[item.entity_id].channels[item.channel_id] = {
               channel_id: item.channel_id,
               geopend: (item.existing > 0) ? true : false
             };
           }
         });
       }
-      res.json({organisations: $outputArray});
+      res.json({entities: $outputArray});
       // error will be an Error if one occurred during the query
       // results will contain the results of the query
       // fields will contain information about the returned results fields (if any)
@@ -257,15 +257,14 @@ router.get('/open', function (req, res) {
 });
 
 //voor intern gebruik _ overzichtpagina
-router.get('/organisations', function (req, res) {
-
-  res.json({organisations: global.organisations});
-
+router.get('/entities', function (req, res) {
+  res.json({entities: global.entities});
 });
-router.get('/organisations/:organisation_id', function (req, res) {
-  var $organisation = loadOrganisation(req.params.organisation_id);
-  console.log($organisation);
-  res.json({organisation: $organisation});
+
+router.get('/entities/:entity_id', function (req, res) {
+  var $entity = entity.loadEntity(req.params.entity_id);
+  console.log($entity);
+  res.json({entity: $entity});
 
 });
 
