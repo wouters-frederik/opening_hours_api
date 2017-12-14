@@ -7,6 +7,7 @@ require('datejs')
 
 var exphbs = require('express-handlebars');
 
+
 // Setup Express app
 var app = express();
 app.use(bodyParser.urlencoded({extended: true})); // configure app to use bodyParser(), this will let us get the data from a POST
@@ -14,8 +15,15 @@ app.use(bodyParser.json());
 app.set('json spaces', 40);
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Setup template engine
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.engine('handlebars', exphbs(
+    {
+        defaultLayout: 'main',
+        helpers: require('./controllers/handlebars.js').helpers
+    }
+));
+
 app.set('view engine', 'handlebars');
 
 // Initialize DB connection

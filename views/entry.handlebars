@@ -7,23 +7,27 @@
 
     <div class="col-10">
 
-      <form>
+        <form id="changeChannel" action="{{url}}" method="get">
         <div class="form-group row">
-          <label for="exampleFormControlSelect1" class="col-sm-2 col-form-label">Kanaal</label>
+          <label for="exampleFormControlSelect1" class="col-sm-2 col-form-label">   </label>
           <div class="col-sm-6">
-            <select class="form-control" id="exampleFormControlSelect1">
-              <option>1700 - chat</option>
-              <option>1700 - telefoon</option>
-              <option>1700 - email</option>
-              <option>E-loket - chat</option>
-              <option>E-loket - telefoon</option>
-              <option>E-loket - email</option>
-              <option>VLABEL - chat</option>
-              <option>VLABEL - telefoon</option>
-              <option>VLABEL - email</option>
-            </select>
-          </div>
+              <input type="hidden" value="{{week}}" name="week">
+          <select class="entityChooser" id="entityChooser" name="entity">
+    {{#each entities}}
+        <option value="{{ id }}" {{isSelected id ../curEntity }}>{{ name }}</option>
+    {{/each}}
+          </select>
+              <select class="channelChooser" id="channelChooser" name="channel">
+                  {{#each channels}}
+                      <option value="{{ id }}" {{isSelected id ../curChannel }} >{{ name }}</option>
+                  {{/each}}
+              </select>
+              <input type="submit" value="Kanaal">
+            </div>
         </div>
+
+        </form>
+         <form>
         <div class="form-group">
           <div class="row">
             <div class="col-sm-8 weekskipper">
