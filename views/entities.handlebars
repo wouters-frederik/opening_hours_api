@@ -14,26 +14,19 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>1700</td>
-        <td>OVO001</td>
-        <td>chat/mail/bel me terug</td>
-        <td><a href="javascript://" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-          <a href="javascript://" title="delete"><i class="fa fa-trash" aria-hidden="true"></i>
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>E-loket</td>
-        <td>OVO-8775</td>
-        <td></td>
-        <td><a href="javascript://" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-          <a href="javascript://" title="delete"><i class="fa fa-trash" aria-hidden="true"></i>
-          </a>
-        </td>
-      </tr>
+        {{#each entities}}
+          <tr>
+            <th scope="row">{{id}}</th>
+            <td>{{ name }}</td>
+            <td>{{ remote_id }}</td>
+            <td>{{ created   }}</td><td>{{ created_by }}</td>
+            <td><a href="javascript://" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+              <a href="javascript://" title="delete"><i class="fa fa-trash" aria-hidden="true"></i>
+              </a>
+            </td>
+          </tr>
+        {{/each}}
+
 
       </tbody>
     </table>

@@ -1,15 +1,15 @@
 // Require modules
-const mysql = require('mysql');
+const mysql = require('mysql2/promise');
 
 // DB connection
 const connectionOpts = process.env.CLEARDB_DATABASE_URL || {
   host: 'localhost',
   database: 'openinghours',
   user: 'root',
-  password: 'root',
+  password: 'mysql',
   canRetry: true
 };
-var dbPool = mysql.createPool(connectionOpts);
+var dbPool =  await mysql.createPool(connectionOpts);
 
 // Attempt to catch disconnects
 dbPool.on('connection', function (connection) {

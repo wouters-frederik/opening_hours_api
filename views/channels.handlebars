@@ -12,46 +12,17 @@
       </tr>
       </thead>
       <tbody>
+    {{#each channels}}
       <tr>
-        <th scope="row">1</th>
-        <td>Chat</td>
+        <th scope="row">{{ id }}</th>
+        <td>{{ name }}</td>
         <td><a href="javascript://" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
           <a href="javascript://" title="delete"><i class="fa fa-trash" aria-hidden="true"></i>
           </a>
         </td>
       </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Mail</td>
-        <td><a href="javascript://" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-          <a href="javascript://" title="delete"><i class="fa fa-trash" aria-hidden="true"></i>
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Call</td>
-        <td><a href="javascript://" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-          <a href="javascript://" title="delete"><i class="fa fa-trash" aria-hidden="true"></i>
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">4</th>
-        <td>Call me back</td>
-        <td><a href="javascript://" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-          <a href="javascript://" title="delete"><i class="fa fa-trash" aria-hidden="true"></i>
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">5</th>
-        <td>schedule call</td>
-        <td><a href="javascript://" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-          <a href="javascript://" title="delete"><i class="fa fa-trash" aria-hidden="true"></i>
-          </a>
-        </td>
-      </tr>
+      {{/each}}
+
       </tbody>
     </table>
   </div>
