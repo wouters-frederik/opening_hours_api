@@ -37,32 +37,22 @@ function deleteOpeningHour(id, callback) {
         });
 }
 
-function getOpeningHoursInRange(entity_id, channel_id, from,to, callback) {
-    var deferred = Q.defer();
-    dbPool.query('SELECT * FROM opening_hours WHERE entity_id = ? and channel_id = ? AND start_time < ? and end_time > ?  ORDER BY start_time ASC', [entity_id, channel_id, to, from],
-        function (error, results, fields) {
-            if (!error) {
-                deferred.resolve(results);
-            } else {
-                //console.log('error', error);
-            }
-            // error will be an Error if one occurred during the query
-            // results will contain the results of the query
-            // fields will contain information about the returned results fields (if any)
-        });
-    return deferred.promise;
+async function getOpeningHoursInRange(entity_id, channel_id, from,to) {
+    const [rows, fields] =  await dbPool.query('SELECT * FROM opening_hours WHERE entity_id = ? and channel_id = ? AND start_time < ? and end_time > ?  ORDER BY start_time ASC', [entity_id, channel_id, to, from]);
+    rows.forEach(function(item){
+        item.start_time_object = new Date(item.start_time * 1000);
+        item.end_time_object = new Date(item.end_time * 1000);
+    });
+    return rows;
 }
-function getOpeningHoursOfDay(entity_id, channel_id, date, callback) {
-
+async function getOpeningHoursOfDay(entity_id, channel_id, date) {
     var end_of_day = Date.today()
         .set({ hour: 23, minute: 59 });
     end_of_day = Math.floor(end_of_day.getTime() /1000);
     var start_of_day = Date.today()
         .set({ hour: 0, minute: 1 });
     start_of_day = Math.floor(start_of_day.getTime() /1000);
-    getOpeningHoursInRange(entity_id,channel_id,start_of_day,end_of_day,function(error,results){
-
-    });
+    return getOpeningHoursInRange(entity_id,channel_id,start_of_day,end_of_day);
 }
 
 

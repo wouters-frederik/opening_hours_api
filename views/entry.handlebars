@@ -1,4 +1,16 @@
 {{> navbar}}
+
+<style>
+    .timeslots{
+        margin-bottom:1em;
+    }
+    .timeslot{
+        padding: 4px;
+        margin: 0.3em;
+        border: 1px solid darkgrey;
+        border-radius: 8px;
+    }
+</style>
 <div class="container">
   <div class="row">
     <div class="col">
@@ -77,10 +89,13 @@
                         data- organisatieId="1"
                         data-channelId="1"
                 >
-                    <h5>{{title}} - {{formattedDate}}</h5>
+                    <h5>{{title}} {{formattedDate}}</h5>
                     <div class="timeslots">
-                      <span class="">08:12 - 13:30 <a href="javascript://"><i class="fa fa-times" aria-hidden="true"></i></a>
-                      </span>
+                        {{#each slots}}
+                            <span class="timeslot" data-id="{{id}}">{{formatTime start_time_object 'HH:mm'}} - {{formatTime end_time_object 'HH:mm'}}
+                                <a href="javascript://" class="delete-timeslot"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            </span>
+                        {{/each}}
                     </div>
 
                     <div class="input-group invoer-nieuwe">

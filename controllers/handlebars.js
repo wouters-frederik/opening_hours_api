@@ -4,10 +4,10 @@ var register = function(Handlebars) {
             return parseInt(value) + 1;
         },
         isSelected: function(p1, p2) {
-            console.log('isSelected is called');
-            console.log(p1);
-            console.log(p2);
             return parseInt(p1) === parseInt(p2) ? 'selected' : '';
+        },
+        formatTime: function(p1, format) {
+            return p1.toString(format);
         }
     };
 

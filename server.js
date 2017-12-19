@@ -54,4 +54,4 @@ app.use(express.static('public'))
 
 // Start server
 app.listen(port);
-console.log('Magic happens on port ' + port);
+console.log('What happens on port ' + port + ' stays on port ' + port );

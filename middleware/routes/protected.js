@@ -2,15 +2,17 @@
 const express = require('express');
 const helper = require('./../../controllers/helper');
 const openingHour = require('./../../controllers/openingHour');
+const channel = require('./../../controllers/channel');
+const entity = require('./../../controllers/entity');
 require('datejs');
-var Q = require('q');
+//var Q = require('q');
 // Setup router for protected routes
 var protectedRouter = express.Router();
 
 // HTML endpoints
-protectedRouter.get('/', function (req, res) {
+protectedRouter.get('/', async function (req, res) {
   //if param does not exist//
-    console.log(req.query);
+
     if (typeof req.query.week == 'undefined') {
         //$startofweek = this monday
         //redirect to this route with ?week=$startofweek
@@ -23,21 +25,24 @@ protectedRouter.get('/', function (req, res) {
 
     }
 
+    try {
+        var channels =  await channel.loadChannels();
+        var entities = await entity.loadEntities();
+    } catch (err) {
+        console.error(err)
+    }
     var weekdays = {};
     var $startofweekString = req.query.week;
     var $startofweek = new Date($startofweekString);
     var formattedVandaag = new Date().toString('yyyy-MM-dd');
     var $startNextWeek = $startofweek.clone().add(7).days();
-    console.log('$startofweek');
-    console.log($startofweek);
     var $startPrevWeek =  $startofweek.clone().add(-7).days();
     ////// Calculate these two"//////
     var curWeekText = '';
 
 
-    console.log('--------------------------------------------');
     var d = new Date;
-    console.log(d.getDay());
+
     if(d.getDay() == 1) {
         var monday = Date.parse('today');
     }else{
@@ -49,9 +54,6 @@ protectedRouter.get('/', function (req, res) {
         curWeekText = 'De week van ' + $startofweek.toString("d MMMM");
     }
 
-    console.log('================================');
-    console.log(req.query.entity);
-    console.log(req.query.channel);
 
     var curEntityId = req.query.entity || 1;
     var curChannelId = req.query.channel || 1;
@@ -62,86 +64,74 @@ protectedRouter.get('/', function (req, res) {
     var friday = $startofweek.clone().add(4).days();
     var saturday = $startofweek.clone().add(5).days();
     var sunday = $startofweek.clone().add(6).days();
+    try {
+        var mondaySlots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,monday.toString('yyyy-MM-dd'));
+        var tuesdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,tuesday.toString('yyyy-MM-dd'));
+        var wednesdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,wednesday.toString('yyyy-MM-dd'));
+        var thursdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,thursday.toString('yyyy-MM-dd'));
+        var fridayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,friday.toString('yyyy-MM-dd'));
+        var saturdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,saturday.toString('yyyy-MM-dd'));
+        var sundayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,sunday.toString('yyyy-MM-dd'));
+    } catch (err) {
+        console.error(err)
+    }
+    console.log(tuesdayslots);
 
-
-    Q.fcall(function(){
         //initialization
 
         weekdays = {
             monday:{
                 date: $startofweek,
-                formattedDate: monday.toString('yyyy-MM-dd'),
+                formattedDate: monday.toString('dd MMMM'),
                 title: "monday",
-                vandaagClass: (Date.today().toString('yyyy-MM-dd') == monday.toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
+                slots: mondaySlots,
+                vandaagClass: (Date.today().toString('yyyy-MM-dd') == monday.toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag',
+
             },
             tuesday:{
-                formattedDate: tuesday.toString('yyyy-MM-dd'),
+                formattedDate: tuesday.toString('dd MMMM'),
                 date: tuesday,
                 title: "tuesday",
+                slots: tuesdayslots,
                 vandaagClass: (Date.today().toString('yyyy-MM-dd') == tuesday.toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             wednesday:{
-                formattedDate: wednesday.toString('yyyy-MM-dd'),
+                formattedDate: wednesday.toString('dd MMMM'),
                 date: wednesday,
                 title: "wednesday",
+                slots: wednesdayslots,
                 vandaagClass: (Date.today().toString('yyyy-MM-dd') == wednesday.toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             thursday:{
-                formattedDate: thursday.toString('yyyy-MM-dd'),
+                formattedDate: thursday.toString('dd MMMM'),
                 date: thursday,
                 title: "thursday",
+                slots: thursdayslots,
                 vandaagClass: (Date.today().toString('yyyy-MM-dd') == thursday.toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             friday:{
-                formattedDate: friday.toString('yyyy-MM-dd'),
+                formattedDate: friday.toString('dd MMMM'),
                 date: friday,
                 title: "friday",
+                slots: fridayslots,
                 vandaagClass: (Date.today().toString('yyyy-MM-dd') == friday.toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             saturday:{
-                formattedDate: saturday.toString('yyyy-MM-dd'),
+                formattedDate: saturday.toString('dd MMMM'),
                 date: saturday,
                 title: "saturday",
+                slots: saturdayslots,
                 vandaagClass: (Date.today().toString('yyyy-MM-dd') == saturday.toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
             },
             sunday:{
-                formattedDate: sunday.toString('yyyy-MM-dd'),
+                formattedDate: sunday.toString('dd MMMM'),
                 date: sunday,
                 title: "sunday",
+                slots: sundayslots,
                 vandaagClass: (Date.today().toString('yyyy-MM-dd') == sunday.toString('yyyy-MM-dd'))?'vandaag': 'niet_vandaag'
 
             }
         };
-    })
-    .then(function(){
-        console.log('WEEKDAYS IS HERE:');
-        getOpeningHoursInRange(curEntityId, curChannelId, $startofweek.set({ hour: 00, minute: 00 }),sunday.set({ hour: 23, minute: 59 })).then(function(results){
-
-        });
-    })
-        // .then(function(){
-        //     console.log('DO MONDAY');
-        //     getOpeningHoursInRange(curEntityId, curChannelId, $startofweek.set({ hour: 00, minute: 00 }),sunday.set({ hour: 23, minute: 59 })).then(function(results){
-        //
-        //     });
-        // })
-    .then(function(results){
-        results.forEach(function(slot){
-            weekdays.forEach(function(weekday){
-                if(slot.day == weekday.toString('yyyy-MM-dd')) {
-                    weekday.slots.push(slot);
-                }
-            })
-        });
-    })
-    // .then(promisedStep4)
-    // .then(function (value4) {
-    //     // Do something with value4
-    // })
-    .catch(function (error) {
-        // Handle any error from all above steps
-    })
-    .done(function(){
 
         var weekNav = {
             prevLink: '?week=' + $startPrevWeek.toISOString() + '&entity=' + curEntityId + '&channel=' + curChannelId ,
@@ -149,26 +139,15 @@ protectedRouter.get('/', function (req, res) {
             curWeekTextString: curWeekText,
             weekdays: weekdays,
             formattedVandaag: formattedVandaag,
-            entities:global.entities,
-            channels: global.channels,
+            entities:entities,
+            channels: channels,
             url:  req.originalUrl,
             week: req.query.week,
             curChannel: curChannelId,
             curEntity: curEntityId
         };
-        console.log(weekNav);
+
         res.render('entry', weekNav);
-    });
-
-
-
-
-
-
-
-//console.log(req);
-
-
 
 
 });
@@ -185,12 +164,11 @@ protectedRouter.get('/insertTestData', function (req, res) {
     days.saturday = $startofweek.clone().add(5).days();
     days.sunday = $startofweek.clone().add(6).days();
 
-    console.log(days);
     //for every day this week
     Object.keys(days).forEach(function(key){
         //select items for today
         var date = days[key];
-        console.log(date);
+
         openingHour.getOpeningHoursOfDay(1,1,date, function(error, items){
             items.forEach(function(slot){
                 console.log(slot);
@@ -226,21 +204,29 @@ protectedRouter.get('/insertTestData', function (req, res) {
 });
 
 
-protectedRouter.get('/channels', function (req, res) {
+protectedRouter.get('/channels',  async function (req, res) {
+    try {
+        var channels =  await channel.loadChannels();
+        res.render('channels',{
+          channels: channels
+        });
+    } catch (err) {
+        console.error(err)
+    }
+});
 
-    // await Promise.all([
-    //     c.execute('select * from channels where 1 order by name ASC'),
-    //     c.execute('select sleep(2.5)')
-    // ])
-  res.render('channels',{
-      channels: global.channels
-  });
+
+protectedRouter.get('/entities', async function (req, res) {
+    try {
+        var entities =  await entity.loadEntities();
+        res.render('entities',{
+            entities: entities
+        });
+    } catch (err) {
+        console.error(err)
+    }
 });
-protectedRouter.get('/entities', function (req, res) {
-  res.render('entities',{
-      entities: global.entities
-  });
-});
+
 protectedRouter.get('/login', function (req, res) {
   res.render('login');
 });

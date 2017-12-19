@@ -9,7 +9,10 @@ const connectionOpts = process.env.CLEARDB_DATABASE_URL || {
   password: 'mysql',
   canRetry: true
 };
-var dbPool =  await mysql.createPool(connectionOpts);
+
+var dbPool =   mysql.createPool(connectionOpts);
+
+
 
 // Attempt to catch disconnects
 dbPool.on('connection', function (connection) {
