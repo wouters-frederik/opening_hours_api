@@ -11,6 +11,9 @@
         border: 1px solid darkgrey;
         border-radius: 8px;
     }
+    .timeslot.active{
+        border: 2px solid teal;
+    }
 </style>
 <div class="container">
     <div class="row">
@@ -97,7 +100,7 @@
                             <h5>{{title}} {{formattedDate}}</h5>
                             <div class="timeslots">
                                 {{#each slots}}
-                                    <span class="timeslot" data-id="{{id}}">{{formatTime start_time_object 'HH:mm'}}
+                                    <span class="timeslot {{activeClass}}" data-id="{{id}}" data-active="{{active}}">{{formatTime start_time_object 'HH:mm'}}
                                         - {{formatTime end_time_object 'HH:mm'}}
                                         <a href="javascript://"
                                            data-delete-url="/ui/openinghours/{{id}}"
