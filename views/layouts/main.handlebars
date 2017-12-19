@@ -80,9 +80,9 @@
                     });
                 });
 
-        $('#addSlot').submit(function (e) {
+        $('.addSlot').submit(function (event) {
             console.log('submitted.');
-            e.preventDefault();
+            event.preventDefault();
             var $form = $(this);
             var $start = $form.find('.start_time').val();
             var $end = $form.find('.end_time').val();
