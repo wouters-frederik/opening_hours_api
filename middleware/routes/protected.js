@@ -65,16 +65,17 @@ protectedRouter.get('/', async function (req, res) {
     var saturday = $startofweek.clone().add(5).days();
     var sunday = $startofweek.clone().add(6).days();
     try {
-        var mondaySlots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,monday.toString('yyyy-MM-dd'));
-        var tuesdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,tuesday.toString('yyyy-MM-dd'));
-        var wednesdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,wednesday.toString('yyyy-MM-dd'));
-        var thursdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,thursday.toString('yyyy-MM-dd'));
-        var fridayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,friday.toString('yyyy-MM-dd'));
-        var saturdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,saturday.toString('yyyy-MM-dd'));
-        var sundayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,sunday.toString('yyyy-MM-dd'));
+        var mondaySlots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,monday);
+        var tuesdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,tuesday);
+        var wednesdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,wednesday);
+        var thursdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,thursday);
+        var fridayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,friday);
+        var saturdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,saturday);
+        var sundayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,sunday);
     } catch (err) {
         console.error(err)
     }
+    console.log(tuesdayslots);
     console.log(tuesdayslots);
 
         //initialization
@@ -172,9 +173,7 @@ protectedRouter.get('/insertTestData', function (req, res) {
         openingHour.getOpeningHoursOfDay(1,1,date, function(error, items){
             items.forEach(function(slot){
                 console.log(slot);
-                openingHour.deleteOpeningHour(slot.id, function(){
-                    res.send('IT IS DELETED');
-                });
+                openingHour.deleteOpeningHour(slot.id);
             });
 
         });
@@ -210,6 +209,16 @@ protectedRouter.get('/channels',  async function (req, res) {
         res.render('channels',{
           channels: channels
         });
+    } catch (err) {
+        console.error(err)
+    }
+});
+
+protectedRouter.delete('/openinghours/:id',  async function (req, res) {
+    try {
+        var status =  await openingHour.deleteOpeningHour(req.params.id);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ success: (!!status)?'deleted':'did not exist' }));
     } catch (err) {
         console.error(err)
     }

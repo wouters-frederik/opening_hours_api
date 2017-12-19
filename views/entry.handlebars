@@ -1,10 +1,11 @@
 {{> navbar}}
 
 <style>
-    .timeslots{
-        margin-bottom:1em;
+    .timeslots {
+        margin-bottom: 1em;
     }
-    .timeslot{
+
+    .timeslot {
         padding: 4px;
         margin: 0.3em;
         border: 1px solid darkgrey;
@@ -12,107 +13,114 @@
     }
 </style>
 <div class="container">
-  <div class="row">
-    <div class="col">
+    <div class="row">
+        <div class="col">
 
-    </div>
-
-    <div class="col-10">
-
-        <form id="changeChannel" action="{{url}}" method="get">
-        <div class="form-group row">
-          <label for="exampleFormControlSelect1" class="col-sm-2 col-form-label">   </label>
-          <div class="col-sm-6">
-              <input type="hidden" value="{{week}}" name="week">
-          <select class="entityChooser" id="entityChooser" name="entity">
-    {{#each entities}}
-        <option value="{{ id }}" {{isSelected id ../curEntity }}>{{ name }}</option>
-    {{/each}}
-          </select>
-              <select class="channelChooser" id="channelChooser" name="channel">
-                  {{#each channels}}
-                      <option value="{{ id }}" {{isSelected id ../curChannel }} >{{ name }}</option>
-                  {{/each}}
-              </select>
-              <input type="submit" value="verander kanaal">
-            </div>
         </div>
 
-        </form>
-         <form>
-        <div class="form-group">
-          <div class="row">
-            <div class="col-sm-8 weekskipper">
+        <div class="col-10">
 
-
-              <a href="{{ prevLink }}" title="vorige week"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-              <b>
-                  {{ curWeekTextString }}
-              </b>
-              <a href="{{ nextLink }}" title="volgende week"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-            </div>
-
-            <div class="col-sm-3">
-
-
-              <div class='input-group date' id='datetimepicker1'>
-                <input type='text' class="form-control" size="8"/>
-                <span class="input-group-addon">
-                                        <a href="javascript:" title="selecteer een datum"><i class="fa fa-calendar-o" aria-hidden="true"></i></a>
-                                     </span>
-
-                <a href="javascript:" title="kopieren van dit schema naar de volgende weken tot"><i class="fa fa-files-o" aria-hidden="true"></i></a>
-
-                <a href="javascript:" title="spring naar week"><i class="fa fa-search" aria-hidden="true"></i></a>
-              </div>
-
-
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group days" id="days">
-
-
-          <!-- PER DAG -->
-
-
-
-            {{#each weekdays}}
-
-                <div
-                        class="day border border-secondary rounded {{vandaagClass}}"
-                        style="padding:1em;"
-
-                        data-dayofweek="0"
-                        data-calendarday="2017-12-31"
-                        data- organisatieId="1"
-                        data-channelId="1"
-                >
-                    <h5>{{title}} {{formattedDate}}</h5>
-                    <div class="timeslots">
-                        {{#each slots}}
-                            <span class="timeslot" data-id="{{id}}">{{formatTime start_time_object 'HH:mm'}} - {{formatTime end_time_object 'HH:mm'}}
-                                <a href="javascript://" class="delete-timeslot"><i class="fa fa-times" aria-hidden="true"></i></a>
-                            </span>
-                        {{/each}}
-                    </div>
-
-                    <div class="input-group invoer-nieuwe">
-                        <input type="text" class="form-control" aria-label="starting hour" placeholder="08:00">
-                        <input type="text" class="form-control" aria-label="end hour" placeholder="22:00">
-                        <span class="input-group-addon">+</span>
+            <form id="changeChannel" action="{{url}}" method="get">
+                <div class="form-group row">
+                    <label for="exampleFormControlSelect1" class="col-sm-2 col-form-label"> </label>
+                    <div class="col-sm-6">
+                        <input type="hidden" value="{{week}}" name="week">
+                        <select class="entityChooser" id="entityChooser" name="entity">
+                            {{#each entities}}
+                                <option value="{{ id }}" {{isSelected id ../curEntity }}>{{ name }}</option>
+                            {{/each}}
+                        </select>
+                        <select class="channelChooser" id="channelChooser" name="channel">
+                            {{#each channels}}
+                                <option value="{{ id }}" {{isSelected id ../curChannel }} >{{ name }}</option>
+                            {{/each}}
+                        </select>
+                        <input type="submit" value="verander kanaal">
                     </div>
                 </div>
-            {{/each}}
 
+            </form>
+            <form>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-8 weekskipper">
+
+
+                            <a href="{{ prevLink }}" title="vorige week"><i class="fa fa-arrow-left"
+                                                                            aria-hidden="true"></i></a>
+                            <b>
+                                {{ curWeekTextString }}
+                            </b>
+                            <a href="{{ nextLink }}" title="volgende week"><i class="fa fa-arrow-right"
+                                                                              aria-hidden="true"></i></a>
+                        </div>
+
+                        <div class="col-sm-3">
+
+
+                            <div class='input-group date' id='datetimepicker1'>
+                                <input type='text' class="form-control" size="8"/>
+                                <span class="input-group-addon">
+                                        <a href="javascript:" title="selecteer een datum"><i class="fa fa-calendar-o"
+                                                                                             aria-hidden="true"></i></a>
+                                     </span>
+
+                                <a href="javascript:" title="kopieren van dit schema naar de volgende weken tot"><i
+                                        class="fa fa-files-o" aria-hidden="true"></i></a>
+
+                                <a href="javascript:" title="spring naar week"><i class="fa fa-search"
+                                                                                  aria-hidden="true"></i></a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group days" id="days">
+
+
+                    <!-- PER DAG -->
+
+
+
+                    {{#each weekdays}}
+
+                        <div
+                                class="day border border-secondary rounded {{vandaagClass}}"
+                                style="padding:1em;"
+
+                                data-dayofweek="0"
+                                data-calendarday="2017-12-31"
+                                data- organisatieId="1"
+                                data-channelId="1"
+                        >
+                            <h5>{{title}} {{formattedDate}}</h5>
+                            <div class="timeslots">
+                                {{#each slots}}
+                                    <span class="timeslot" data-id="{{id}}">{{formatTime start_time_object 'HH:mm'}}
+                                        - {{formatTime end_time_object 'HH:mm'}}
+                                        <a href="javascript://" data-delete-url="/ui/openinghours/{{id}}"
+                                           class="delete-timeslot"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            </span>
+                                {{/each}}
+                            </div>
+
+                            <div class="input-group invoer-nieuwe">
+                                <input type="text" class="form-control" aria-label="starting hour" placeholder="08:00">
+                                <input type="text" class="form-control" aria-label="end hour" placeholder="22:00">
+                                <span class="input-group-addon">+</span>
+                            </div>
+                        </div>
+                    {{/each}}
+
+
+                </div>
+            </form>
 
         </div>
-      </form>
+        <div class="col">
 
+        </div>
     </div>
-    <div class="col">
-
-    </div>
-  </div>
 </div>

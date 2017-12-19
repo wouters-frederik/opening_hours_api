@@ -22,19 +22,10 @@ function createOpeningsUur(entity_id,channel_id,day,start_time,end_time, created
         });
 }
 
-function deleteOpeningHour(id, callback) {
-    dbPool.query('DELETE FROM opening_hours where id = ?', [id],
-        function (error, results, fields) {
-            if (!error) {
-                callback(error);
-            } else {
-                //console.log('error', error);
-            }
-
-            // error will be an Error if one occurred during the query
-            // results will contain the results of the query
-            // fields will contain information about the returned results fields (if any)
-        });
+async function deleteOpeningHour(id) {
+    ;
+    const [rows, fields]  = await dbPool.query('DELETE FROM opening_hours where id = ?', [id]);
+    return rows.affectedRows;
 }
 
 async function getOpeningHoursInRange(entity_id, channel_id, from,to) {
@@ -46,10 +37,10 @@ async function getOpeningHoursInRange(entity_id, channel_id, from,to) {
     return rows;
 }
 async function getOpeningHoursOfDay(entity_id, channel_id, date) {
-    var end_of_day = Date.today()
+    var end_of_day = date
         .set({ hour: 23, minute: 59 });
     end_of_day = Math.floor(end_of_day.getTime() /1000);
-    var start_of_day = Date.today()
+    var start_of_day = date
         .set({ hour: 0, minute: 1 });
     start_of_day = Math.floor(start_of_day.getTime() /1000);
     return getOpeningHoursInRange(entity_id,channel_id,start_of_day,end_of_day);
