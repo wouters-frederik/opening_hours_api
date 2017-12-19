@@ -223,6 +223,44 @@ protectedRouter.delete('/openinghours/:id',  async function (req, res) {
         console.error(err)
     }
 });
+protectedRouter.post('/openinghours',  async function (req, res) {
+    try {
+        console.log(req.body);
+        var oh = req.body;
+        //transform start_time to UNIX timestamp
+        //transform end_time to unix timestamp
+        //var startTime = var birthDayParty = {month: 1, day: 20, hour: 20, minute: 30};
+        var day = new Date(oh.day);
+        console.log(day.toString('MM'));
+        console.log(day.toString('dd'));
+        console.log(day.toString('yyyy'));
+        console.log(oh.start_time.substr(0,2));
+        console.log(oh.start_time.substr(3,2));
+        var startTime = Date.today().set({
+            month: parseInt(day.toString('MM')),
+            day: parseInt(day.toString('dd')),
+            year: parseInt(day.toString('yyyy')),
+            hour: parseInt(oh.start_time.substr(0,2)),
+            minute: parseInt(oh.start_time.substr(3,2))
+        });
+        var endTime = Date.today().set({
+            month: parseInt(day.toString('MM')),
+            day: parseInt(day.toString('dd')),
+            year: parseInt(day.toString('yyyy')),
+            hour: parseInt(oh.end_time.substr(0,2)),
+            minute: parseInt(oh.end_time.substr(3,2))
+        });
+        console.log(startTime.toISOString());
+        console.log(endTime.toISOString());
+
+         var id =  await openingHour.createOpeningsUur(oh.entity_id,oh.channel_id,oh.day, startTime.getTime() / 1000, endTime.getTime() / 1000);
+        // var status =  await openingHour.deleteOpeningHour(req.params.id);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ created: (!!id)?id:false }));
+    } catch (err) {
+        console.error(err)
+    }
+});
 
 
 protectedRouter.get('/entities', async function (req, res) {

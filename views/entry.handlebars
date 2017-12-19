@@ -40,7 +40,7 @@
                 </div>
 
             </form>
-            <form>
+
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-8 weekskipper">
@@ -56,8 +56,7 @@
                         </div>
 
                         <div class="col-sm-3">
-
-
+                            <form class="actions" id="actions">
                             <div class='input-group date' id='datetimepicker1'>
                                 <input type='text' class="form-control" size="8"/>
                                 <span class="input-group-addon">
@@ -71,7 +70,7 @@
                                 <a href="javascript:" title="spring naar week"><i class="fa fa-search"
                                                                                   aria-hidden="true"></i></a>
                             </div>
-
+                            </form>
 
                         </div>
                     </div>
@@ -100,23 +99,39 @@
                                 {{#each slots}}
                                     <span class="timeslot" data-id="{{id}}">{{formatTime start_time_object 'HH:mm'}}
                                         - {{formatTime end_time_object 'HH:mm'}}
-                                        <a href="javascript://" data-delete-url="/ui/openinghours/{{id}}"
+                                        <a href="javascript://"
+                                           data-delete-url="/ui/openinghours/{{id}}"
                                            class="delete-timeslot"><i class="fa fa-times" aria-hidden="true"></i></a>
                             </span>
                                 {{/each}}
                             </div>
 
+                            <form class="addSlot" id="addSlot" data-create-url="/ui/openinghours">
                             <div class="input-group invoer-nieuwe">
-                                <input type="text" class="form-control" aria-label="starting hour" placeholder="08:00">
-                                <input type="text" class="form-control" aria-label="end hour" placeholder="22:00">
-                                <span class="input-group-addon">+</span>
+                                <input type="hidden" name="entity_id" id="entity_id" value="{{../curEntity}}">
+                                <input type="hidden" name="channel_id" id="channel_id" value="{{../curChannel}}">
+                                <input type="hidden" name="day" value="{{formatTime date 'yyyy-MM-dd'}}">
+                                <input type="text"   name="start_time"
+                                       class="start_time form-control"
+                                       aria-label="starting hour"
+                                       placeholder="08:00"
+                                       pattern="[0-9][0-9]:[0-9][0-9]"
+                                    >
+                                <input type="text"   name="end_time"
+                                       class="end_time form-control"
+                                       aria-label="end hour"
+                                       placeholder="22:00"
+                                       pattern="[0-9][0-9]:[0-9][0-9]"
+                                >
+                                <input type="submit" class="input-group-addon" value="+" />
                             </div>
+                            </form>
                         </div>
                     {{/each}}
 
 
                 </div>
-            </form>
+
 
         </div>
         <div class="col">
