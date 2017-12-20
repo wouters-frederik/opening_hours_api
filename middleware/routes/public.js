@@ -7,6 +7,20 @@ const channel = require('../../controllers/channel');
 // Setup router for public
 var router = express.Router();              // get an instance of the express Router
 
+
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array)
+    }
+}
+
+function TextRowToObject(obj){
+    var newObj = {};
+    Object.assign(newObj, obj);
+    return newObj;
+}
+
+
 router.get('/openinghours/:entity_id/:channel_id', async function (req, res) {
     //req.params.entity_id
     var datetimeFrom = req.params.from || helper.formatDateFromJs(new Date());
@@ -162,36 +176,48 @@ router.get('/open', async function (req, res) {
     // console.log(huidigeDag);
     // console.log(req.params.entity_id);
     // console.log(req.params.channel_id);
-    const [results, fields] = await
-    dbPool.query('SELECT entity_id , channel_id, count(id) as existing FROM opening_hours ' +
+    var channels = await channel.loadChannels();
+    var entities = await entity.loadEntities();
+
+    const [results, fields] = await dbPool.query('SELECT entity_id , channel_id, count(id) as existing FROM opening_hours ' +
         'WHERE day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY entity_id, channel_id',
         [
             huidigeDag,
             datetime,
             datetime
         ]);
-    var $outputArray = {};
+        var $outputArray = {};
 
-    results.forEach(function (item) {
-        if (typeof $outputArray[item.entity_id] == 'undefined') {
-            $outputArray[item.entity_id] = {entity_id: item.entity_id, channels: {}};
-        }
-        if (typeof $outputArray[item.entity_id].channels[item.channel_id] == 'undefined') {
-            $outputArray[item.entity_id].channels[item.channel_id] = {
-                channel_id: item.channel_id,
-                geopend: (item.existing > 0) ? true : false
-            };
-        }
-    });
+        await asyncForEach(results, async (item) => {
+            if (typeof $outputArray[item.entity_id] == 'undefined') {
 
+                var entityObject =  await entity.loadEntity(item.entity_id);
+                entityObject.channels = {};
+                $outputArray[item.entity_id] = entityObject;
+            }
+            if (typeof $outputArray[item.entity_id].channels[item.channel_id] == 'undefined') {
+
+                var channelObject = await channel.loadChannel(item.channel_id);
+
+                channelObject.geopend = (item.existing > 0) ? true : false;
+                $outputArray[item.entity_id].channels[item.channel_id] = channelObject;
+                console.log('prepopulating object array');
+            }
+    })
+
+
+
+
+
+    console.log('output');
+    console.log($outputArray);
     res.json({entities: $outputArray});
 });
 
 //voor intern gebruik _ overzichtpagina
 router.get('/entities', async function (req, res) {
     try {
-    var entities = await
-    entity.loadEntities();
+    var entities = await entity.loadEntities();
     res.json({entities: entities});
     } catch (err) {
         console.error(err)
@@ -202,7 +228,7 @@ router.get('/entities', async function (req, res) {
 
 router.get('/entities/:entity_id', async function (req, res) {
     try {
-        var $entity = entity.loadEntity(req.params.entity_id);
+        var $entity = await entity.loadEntity(req.params.entity_id);
         console.log($entity);
         res.json({entity: $entity});
     } catch (err) {
@@ -213,8 +239,8 @@ router.get('/entities/:entity_id', async function (req, res) {
 //voor intern gebruik _ overzichtpagina
 router.get('/channels', async function (req, res) {
     try {
-        var entities = await channel.loadChannels();
-        res.json({channels: entities});
+        var channels = await channel.loadChannels();
+        res.json({channels: channels});
     } catch (err) {
         console.error(err)
     }

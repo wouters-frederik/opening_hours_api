@@ -20,15 +20,13 @@ const dbPool = require('./db');
 
 async function loadChannels () {
     const [rows, fields] =  await dbPool.query('SELECT * FROM channels WHERE 1 ORDER BY name ASC', []);
+    global.channels = rows;
     return rows;
 }
 
-function loadChannel (searchId) {
-  global.channels.forEach(function (item) {
-    if (item.id == searchId) {
-      return item;
-    }
-  })
+async function loadChannel (searchId) {
+    const [rows, fields] =  await dbPool.query('SELECT * FROM channels WHERE id = ? ', [parseInt(searchId)]);
+    return rows[0];
 }
 
 function loadChannelByEntity (searchId) {
@@ -39,6 +37,7 @@ function loadChannelByEntity (searchId) {
       $channels.push(item);
     }
   });
+
   console.log('CHANNELS FOUND');
   console.log($channels);
   return $channels;

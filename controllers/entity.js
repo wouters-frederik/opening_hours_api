@@ -4,20 +4,14 @@ const dbPool = require('./db');
 
 async function loadEntities () {
     const [rows, fields] =  await dbPool.query('SELECT * FROM entities WHERE 1 ORDER BY name ASC', []);
+    global.entities = rows;
     return rows;
 }
 
 
-function loadEntity(searchId) {
-  console.log('loadEntities');
-  console.log(global.entities);
-  var $entity = {};
-  global.entities.forEach(function (item, index) {
-    if (item.id == searchId) {
-        $entity = item;
-    }
-  });
-  return $entity;
+async function loadEntity(searchId) {
+        const [rows, fields] =  await dbPool.query('SELECT * FROM entities WHERE id = ? ', [parseInt(searchId)]);
+        return rows[0];
 }
 
 module.exports = {
