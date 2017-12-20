@@ -225,17 +225,17 @@ protectedRouter.delete('/openinghours/:id',  async function (req, res) {
 });
 protectedRouter.post('/openinghours',  async function (req, res) {
     try {
-        console.log(req.body);
+        //console.log(req.body);
         var oh = req.body;
         //transform start_time to UNIX timestamp
         //transform end_time to unix timestamp
         //var startTime = var birthDayParty = {month: 1, day: 20, hour: 20, minute: 30};
         var day = new Date(oh.day);
-        console.log(day.toString('MM'));
-        console.log(day.toString('dd'));
-        console.log(day.toString('yyyy'));
-        console.log(oh.start_time.substr(0,2));
-        console.log(oh.start_time.substr(3,2));
+        // console.log(day.toString('MM'));
+        // console.log(day.toString('dd'));
+        // console.log(day.toString('yyyy'));
+        // console.log(oh.start_time.substr(0,2));
+        // console.log(oh.start_time.substr(3,2));
         var startTime = Date.today().set({
             month: parseInt(day.toString('MM')),
             day: parseInt(day.toString('dd')),
