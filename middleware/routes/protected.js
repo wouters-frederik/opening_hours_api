@@ -206,27 +206,43 @@ protectedRouter.get('/insertTestData', function (req, res) {
 
 protectedRouter.get('/open',  async function (req, res) {
     try {
-        var datetimeFrom = req.params.from || helper.formatDateFromJs(new Date());
-        var todate = new Date();
-        todate.setDate(todate.getDate() + 7);
-        var datetimeTo = req.params.to || helper.formatDateFromJs(todate);
-        var entities =  await entity.loadEntities();
-        var channels =  await channel.loadChannels();
-        var openchannels = {};
-        const [results, fields] = await
-        dbPool.query('SELECT * ' +
-            'FROM opening_hours ' +
-            '   WHERE day >= ?' +
-            '   AND day <= ?' +
-            'ORDER BY day ASC, start_time ASC',
+        var datetime = req.params.timestamp || Math.floor(Date.now() / 1000);
+        var huidigeDag = helper.formatDateFromUnix(datetime);
+        // console.log(datetime);
+        // console.log(huidigeDag);
+        // console.log(req.params.entity_id);
+        // console.log(req.params.channel_id);
+        var channels = await channel.loadChannels();
+        var entities = await entity.loadEntities();
+
+        const [results, fields] = await dbPool.query('SELECT entity_id , channel_id, start_time,end_time  FROM opening_hours ' +
+            'WHERE day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY entity_id, channel_id',
             [
-                datetimeFrom,
-                datetimeTo
+                huidigeDag,
+                datetime,
+                datetime
             ]);
-        var openChannels = await helper.transformQueryResultsToOrgChannelDaysOutput(results);
-        console.log(openChannels);
+        var $outputArray = {};
+
+        await helper.asyncForEach(results, async (item) => {
+            if (typeof $outputArray[item.entity_id] == 'undefined') {
+
+            var entityObject =  await entity.loadEntity(item.entity_id);
+            entityObject.channels = {};
+            $outputArray[item.entity_id] = entityObject;
+        }
+        if (typeof $outputArray[item.entity_id].channels[item.channel_id] == 'undefined') {
+            var channelObject = await channel.loadChannel(item.channel_id);
+            channelObject.geopend = (item.existing > 0) ? true : false;
+            item.start_time_object = new Date(item.start_time * 1000);
+            item.end_time_object = new Date(item.end_time * 1000);
+            channelObject.item = item;
+            $outputArray[item.entity_id].channels[item.channel_id] = channelObject;
+            console.log('prepopulating object array');
+        }
+    });
         res.render('openoverzicht',{
-            entities: openChannels
+            entities: $outputArray
         });
     } catch (err) {
         console.error(err)

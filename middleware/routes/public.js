@@ -8,11 +8,7 @@ const helper = require('./../../controllers/helper');
 var router = express.Router();              // get an instance of the express Router
 
 
-async function asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index++) {
-        await callback(array[index], index, array)
-    }
-}
+
 
 
 router.get('/openinghours/:entity_id/:channel_id', async function (req, res) {
@@ -143,7 +139,7 @@ router.get('/open/:entity_id', async function (req, res) {
 
         var $outputArray = {};
 
-        await asyncForEach(results, async (item) => {
+        await helper.asyncForEach(results, async (item) => {
             if (typeof $outputArray[item.channel_id] == 'undefined') {
                 var channelObject = await channel.loadChannel(item.channel_id);
                 channelObject.geopend =  (item.existing > 0) ? true : false;
@@ -181,7 +177,7 @@ router.get('/open', async function (req, res) {
         ]);
         var $outputArray = {};
 
-        await asyncForEach(results, async (item) => {
+        await helper.asyncForeach(results, async (item) => {
             if (typeof $outputArray[item.entity_id] == 'undefined') {
 
                 var entityObject =  await entity.loadEntity(item.entity_id);
@@ -189,9 +185,7 @@ router.get('/open', async function (req, res) {
                 $outputArray[item.entity_id] = entityObject;
             }
             if (typeof $outputArray[item.entity_id].channels[item.channel_id] == 'undefined') {
-
                 var channelObject = await channel.loadChannel(item.channel_id);
-
                 channelObject.geopend = (item.existing > 0) ? true : false;
                 $outputArray[item.entity_id].channels[item.channel_id] = channelObject;
                 console.log('prepopulating object array');

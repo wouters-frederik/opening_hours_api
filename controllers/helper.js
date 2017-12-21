@@ -35,8 +35,14 @@ function getMonday(d) {
     var day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
     return new Date(d.setDate(diff));
 }
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array)
+    }
+}
 
 module.exports = {
+    asyncForEach: asyncForEach,
     formatDateFromJs: formatDateFromJs,
     addDays:addDays,
     subtractDays:subtractDays,
