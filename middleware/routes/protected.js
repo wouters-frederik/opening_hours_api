@@ -136,8 +136,8 @@ protectedRouter.get('/', async function (req, res) {
         };
 var strippedUrl = req.originalUrl.substring(0,req.originalUrl.indexOf('?'));
         var weekNav = {
-            prevLink: '?week=' + $startPrevWeek.toISOString() + '&entity=' + curEntityId + '&channel=' + curChannelId ,
-            nextLink: '?week=' + $startNextWeek.toISOString() + '&entity=' + curEntityId + '&channel=' + curChannelId,
+            prevLink: '?week=' + $startPrevWeek.toString('yyyy-MM-dd') + '&entity=' + curEntityId + '&channel=' + curChannelId ,
+            nextLink: '?week=' + $startNextWeek.toString('yyyy-MM-dd') + '&entity=' + curEntityId + '&channel=' + curChannelId,
             curWeekTextString: curWeekText,
             curWeekTimeString: $startofweekString,
             weekdays: weekdays,
