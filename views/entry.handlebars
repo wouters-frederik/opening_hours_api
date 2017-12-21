@@ -59,9 +59,13 @@
                         </div>
 
                         <div class="col-sm-3">
-                            <form class="actions" id="actions">
-                            <div class='input-group date' id='datetimepicker1'>
-                                <input type='text' class="form-control" size="8"/>
+                            <form class="actions" id="actions" method="get" action="{{strippedUrl}}">
+                            <div class='input-group date' id=''>
+                                <input type="hidden" id="entity" name="entity" value="{{curEntity}}">
+                                <input type="hidden" id="channel" name="channel" value="{{curChannel}}">
+
+                                <input type="hidden" id="week" name="week" value="{{curWeekTimeString}}">
+                                <input type='text' class="form-control datetimepicker1" size="8" value="{{curWeekTimeString}}"/>
                                 <span class="input-group-addon">
                                         <a href="javascript:" title="selecteer een datum"><i class="fa fa-calendar-o"
                                                                                              aria-hidden="true"></i></a>

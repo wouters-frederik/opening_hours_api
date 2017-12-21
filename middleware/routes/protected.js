@@ -134,11 +134,12 @@ protectedRouter.get('/', async function (req, res) {
 
             }
         };
-
+var strippedUrl = req.originalUrl.substring(0,req.originalUrl.indexOf('?'));
         var weekNav = {
             prevLink: '?week=' + $startPrevWeek.toISOString() + '&entity=' + curEntityId + '&channel=' + curChannelId ,
             nextLink: '?week=' + $startNextWeek.toISOString() + '&entity=' + curEntityId + '&channel=' + curChannelId,
             curWeekTextString: curWeekText,
+            curWeekTimeString: $startofweekString,
             weekdays: weekdays,
             formattedVandaag: formattedVandaag,
             entities:entities,
@@ -146,7 +147,8 @@ protectedRouter.get('/', async function (req, res) {
             url:  req.originalUrl,
             week: req.query.week,
             curChannel: curChannelId,
-            curEntity: curEntityId
+            curEntity: curEntityId,
+            strippedUrl: strippedUrl,
         };
 
         res.render('entry', weekNav);
