@@ -18,13 +18,13 @@ protectedRouter.get('/', async function (req, res) {
         //$startofweek = this monday
         //redirect to this route with ?week=$startofweek
         res.writeHead(302, {
-            'Location': '?week=' + helper.getMonday(new Date()).toISOString()
+            'Location': '?entity=1&channel=1&week=' + helper.getMonday(new Date()).toString('yyyy-MM-dd')
             //add other headers here...
         });
         res.end();
-
-
+        return ;
     }
+
 
     try {
         var channels =  await channel.loadChannels();
@@ -56,8 +56,10 @@ protectedRouter.get('/', async function (req, res) {
     }
 
 
+
     var curEntityId = req.query.entity || 1;
     var curChannelId = req.query.channel || 1;
+
     var monday = $startofweek;
     var tuesday = $startofweek.clone().add(1).days();
     var wednesday = $startofweek.clone().add(2).days();

@@ -43,7 +43,8 @@ async function getOpeningHoursOfDay(entity_id, channel_id, date) {
     var start_of_day = date
         .set({ hour: 0, minute: 1 });
     start_of_day = Math.floor(start_of_day.getTime() /1000);
-    return getOpeningHoursInRange(entity_id,channel_id,start_of_day,end_of_day);
+
+    return getOpeningHoursInRange(parseInt(entity_id),parseInt(channel_id),start_of_day,end_of_day);
 }
 
 
