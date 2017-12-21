@@ -1,9 +1,9 @@
 // Require modules
 const express = require('express');
-const helper = require('./../../controllers/helper');
 const openingHour = require('./../../controllers/openingHour');
 const channel = require('./../../controllers/channel');
 const entity = require('./../../controllers/entity');
+const helper = require('./../../controllers/helper');
 require('datejs');
 //var Q = require('q');
 // Setup router for protected routes

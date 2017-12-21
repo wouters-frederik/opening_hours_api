@@ -1,9 +1,9 @@
 // Require modules
 const express = require('express');
-const helper = require('./../../controllers/helper');
 const dbPool = require('../../controllers/db');
 const entity = require('../../controllers/entity');
 const channel = require('../../controllers/channel');
+const helper = require('./../../controllers/helper');
 // Setup router for public
 var router = express.Router();              // get an instance of the express Router
 
@@ -12,12 +12,6 @@ async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array)
     }
-}
-
-function TextRowToObject(obj){
-    var newObj = {};
-    Object.assign(newObj, obj);
-    return newObj;
 }
 
 
@@ -42,7 +36,6 @@ router.get('/openinghours/:entity_id/:channel_id', async function (req, res) {
             datetimeTo
         ]);
     var $days = helper.transformQueryResultsToDaysOutput(results);
-    //console.log($days);
     res.json({days: $days});
 }
 )
@@ -66,8 +59,7 @@ router.get('/openinghours/:entity_id', async function (req, res) {
             datetimeFrom,
             datetimeTo
         ]);
-    var $channels = helper.transformQueryResultsToChannelDaysOutput(results);
-    //console.log($channels);
+    var $channels = await helper.transformQueryResultsToChannelDaysOutput(results);
     res.json({channels: $channels});
 }
 )
@@ -88,9 +80,8 @@ router.get('/openinghours', async function (req, res) {
             datetimeFrom,
             datetimeTo
         ]);
-    var $channels = helper.transformQueryResultsToOrgChannelDaysOutput(results);
+    var $channels = await helper.transformQueryResultsToOrgChannelDaysOutput(results);
     res.json({entities: $channels});
-
 }
 )
 ;
@@ -126,6 +117,7 @@ router.get('/open/:entity_id/:channel_id', async function (req, res) {
     res.json({geopend: $geopend});
     });
 
+
 router.get('/open/:entity_id', async function (req, res) {
     //req.params.entity_id
     //req.params.channel_id
@@ -134,6 +126,10 @@ router.get('/open/:entity_id', async function (req, res) {
     //req.params.entity_id
     //req.params.channel_id
     //optionele url parameter: timestamp (toon status on timestamp).
+
+    var channels = await channel.loadChannels();
+    var entities = await entity.loadEntities();
+
     var datetime = req.params.timestamp || Math.floor(Date.now() / 1000);
     var huidigeDag = helper.formatDateFromUnix(datetime);
     const [results,fields] = await dbPool.query('SELECT  channel_id, count(id) as existing FROM opening_hours ' +
@@ -147,16 +143,13 @@ router.get('/open/:entity_id', async function (req, res) {
 
         var $outputArray = {};
 
-        results.forEach(function (item) {
-
+        await asyncForEach(results, async (item) => {
             if (typeof $outputArray[item.channel_id] == 'undefined') {
-                $outputArray[item.channel_id] = {
-                    channel_id: item.channel_id,
-                    geopend: (item.existing > 0) ? true : false
-                };
+                var channelObject = await channel.loadChannel(item.channel_id);
+                channelObject.geopend =  (item.existing > 0) ? true : false;
+                $outputArray[item.channel_id] = channelObject;
             }
         });
-
         res.json({channels: $outputArray});
 });
 
@@ -203,14 +196,8 @@ router.get('/open', async function (req, res) {
                 $outputArray[item.entity_id].channels[item.channel_id] = channelObject;
                 console.log('prepopulating object array');
             }
-    })
+    });
 
-
-
-
-
-    console.log('output');
-    console.log($outputArray);
     res.json({entities: $outputArray});
 });
 

@@ -1,3 +1,13 @@
+
+const entity = require('./entity');
+const channel = require('./channel');
+
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array)
+    }
+}
+
 formatDateFromJs =  function (today) {
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
@@ -35,47 +45,58 @@ module.exports = {
     var today = new Date(timestamp * 1000);
     return formatDateFromJs(today);
   },
-  transformQueryResultsToOrgChannelDaysOutput: function (results) {
+
+  transformQueryResultsToOrgChannelDaysOutput: async function (results) {
     var $days = {};
-    results.forEach(function (item) {
+    for (let item of results){
       if (typeof $days[item.entity_id] == 'undefined') {
-        $days[item.entity_id] = {
-          id: item.entity_id,
-          channels: {}
-        };
+          var entityObject =  await entity.loadEntity(item.entity_id);
+          entityObject.channels = {};
+        $days[item.entity_id] = entityObject;
       }
+
       if (typeof $days[item.entity_id].channels[item.channel_id] == 'undefined') {
-        $days[item.entity_id].channels[item.channel_id] = {
-          id: item.channel_id,
-          days: {}
-        };
+          var channelObject =  await channel.loadChannel(item.channel_id);
+          channelObject.days = {};
+          $days[item.entity_id].channels[item.channel_id] = channelObject;
       }
+
       var formattedDate = formatDateFromJs(item.day);
-      console.log(formattedDate);
       if (typeof $days[item.entity_id].channels[item.channel_id].days[formattedDate] == 'undefined') {
         $days[item.entity_id].channels[item.channel_id].days[formattedDate] = [];
       }
+
       $days[item.entity_id].channels[item.channel_id].days[formattedDate].push({
         from: item.start_time,
         to: item.end_time
       });
-    });
-    return $days;
-  },
-  transformQueryResultsToChannelDaysOutput: function (results) {
-    var $days = {};
-    results.forEach(function (item) {
 
-      if (typeof $days[item.channel_id] == 'undefined') {
-        $days[item.channel_id] = {id: item.channel_id, days: {}};
-      }
-      if (typeof $days[item.channel_id].days[formatDateFromJs(item.day)] == 'undefined') {
-        $days[item.channel_id].days[formatDateFromJs(item.day)] = [];
-      }
-      $days[item.channel_id].days[formatDateFromJs(item.day)].push({from: item.start_time, to: item.end_time});
-    });
+    }
     return $days;
   },
+
+
+  transformQueryResultsToChannelDaysOutput: async function (results) {
+    var $days = {};
+    console.log('transformQueryResultsToChannelDaysOutput');
+        await asyncForEach(results, async function(item){
+          if (typeof $days[item.channel_id] == 'undefined') {
+            var channelObject =  await channel.loadChannel(item.channel_id);
+            channelObject.days = {};
+            $days[item.channel_id] = channelObject;
+          }
+          var formatted = formatDateFromJs(item.day);
+          if (typeof $days[item.channel_id].days[formatted] == 'undefined') {
+            $days[item.channel_id].days[formatted] = [];
+          }
+          $days[item.channel_id].days[formatted].push({from: item.start_time, to: item.end_time});
+    });
+
+    console.log('$days');
+    console.log($days);
+    return $days;
+  },
+
   transformQueryResultsToDaysOutput: function transformQueryResultsToDaysOutput (results) {
     var $days = {};
     results.forEach(function (item) {
