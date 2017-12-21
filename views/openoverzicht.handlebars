@@ -9,25 +9,28 @@
             <thead>
             <tr>
                 <th scope="col">kanaal</th>
-                <th scope="col">open</th>
+                <th scope="col">dag</th>
+                <th scope="col">uren</th>
             </tr>
             </thead>
             <tbody>
             {{#each channels}}
-                <tr>
-                    <td>{{ name }}</td>
-                    <td>
-                    {{#each days as |day index|}}
+                {{#each days as |day index|}}
+                    <tr>
+                        <td>{{ ../name }}</td>
 
-                        {{#each day}}
-                            <div>
-                                {{formatTime fromTime 'HH:mm'}} - {{formatTime toTime 'HH:mm'}}
-                            </div>
-                        {{/each}}
-
-                    {{/each}}
-                    </td>
-                </tr>
+                        <td>
+                            {{index}}
+                        </td>
+                        <td>
+                            {{#each day}}
+                                <div>
+                                    {{formatTime fromTime 'HH:mm'}} - {{formatTime toTime 'HH:mm'}}
+                                </div>
+                            {{/each}}
+                        </td>
+                    </tr>
+                {{/each}}
             {{/each}}
 
             </tbody>
