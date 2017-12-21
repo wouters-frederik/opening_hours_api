@@ -14,6 +14,10 @@
     .timeslot.active{
         border: 2px solid teal;
     }
+    .ui-menu { width: 200px; }
+    #actions-menu{
+        width: 50px;
+    }
 </style>
 <div class="container">
     <div class="row">
@@ -67,15 +71,30 @@
                                 <input type="hidden" id="week" name="week" value="{{curWeekTimeString}}">
                                 <input type='text' class="form-control datetimepicker1" size="8" value="{{curWeekTimeString}}"/>
                                 <span class="input-group-addon">
-                                        <a href="javascript:" title="selecteer een datum"><i class="fa fa-calendar-o"
+                                        <a href="javascript:" class="opendatepicker" title="selecteer een datum"><i class="fa fa-calendar-o"
                                                                                              aria-hidden="true"></i></a>
                                      </span>
 
-                                <a href="javascript:" title="kopieren van dit schema naar de volgende weken tot"><i
-                                        class="fa fa-files-o" aria-hidden="true"></i></a>
 
-                                <a href="javascript:" title="spring naar week"><i class="fa fa-search"
-                                                                                  aria-hidden="true"></i></a>
+                                <ul id="actions-menu">
+                                    <li>
+                                        <a href="javascript://" title="actions"><i class="fa fa-cog" aria-hidden="true"></i></a>
+                                        <ul>
+                                            <li>
+                                                <a href="javascript://">Kopieer naar toekomst</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript://">Kopieer naar ander kanaal</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                                <!--<a href="javascript:" title="kopieren van dit schema naar de volgende weken tot"><i-->
+                                        <!--class="fa fa-files-o" aria-hidden="true"></i></a>-->
+
+                                <!--<a href="javascript:" title="spring naar week"><i class="fa fa-search"-->
+                                                                                  <!--aria-hidden="true"></i></a>-->
                             </div>
                             </form>
 

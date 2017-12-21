@@ -131,6 +131,16 @@
                     $(this).parents('form').submit();
                 }
             });
+
+            $('.opendatepicker').click(function(){
+                $( ".datetimepicker1" ).focus();
+            });
+            $( "#actions-menu" ).menu({
+                select: function( event, ui ) {
+                    console.log('clicked on action!');
+                    alert('dit werkt nog niet. HElaas :)');
+                }
+            });
         } );
 
 
