@@ -67,8 +67,11 @@ module.exports = {
       }
 
       $days[item.entity_id].channels[item.channel_id].days[formattedDate].push({
-        from: item.start_time,
-        to: item.end_time
+            date: formattedDate,
+            from: item.start_time,
+            fromTime: new Date(item.start_time*1000),
+            to: item.end_time,
+            toTime: new Date(item.end_time*1000),
       });
 
     }
@@ -89,7 +92,14 @@ module.exports = {
           if (typeof $days[item.channel_id].days[formatted] == 'undefined') {
             $days[item.channel_id].days[formatted] = [];
           }
-          $days[item.channel_id].days[formatted].push({from: item.start_time, to: item.end_time});
+          $days[item.channel_id].days[formatted].push(
+              {
+                  date: formatted,
+                  from: item.start_time,
+                  fromTime: new Date(item.start_time*1000),
+                  to: item.end_time,
+                  toTime: new Date(item.end_time*1000)
+              });
     });
 
     console.log('$days');
@@ -101,10 +111,19 @@ module.exports = {
     var $days = {};
     results.forEach(function (item) {
       //console.log(item);
-      if (typeof $days[formatDateFromJs(item.day)] == 'undefined') {
-        $days[formatDateFromJs(item.day)] = [];
+        var formatted = formatDateFromJs(item.day);
+      if (typeof $days[formatted] == 'undefined') {
+        $days[formatted] = [];
       }
-      $days[formatDateFromJs(item.day)].push({from: item.start_time, to: item.end_time});
+
+      $days[formatted].push(
+          {
+              date:formatted,
+              from: item.start_time,
+              fromTime: new Date(item.start_time*1000),
+              to: item.end_time,
+              toTime: new Date(item.end_time*1000)
+          });
     });
     return $days;
   }

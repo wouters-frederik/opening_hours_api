@@ -8,6 +8,9 @@ var register = function(Handlebars) {
         },
         formatTime: function(p1, format) {
             return p1.toString(format);
+        },
+        toJSON : function(object) {
+            return JSON.stringify(object);
         }
     };
 

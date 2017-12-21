@@ -4,6 +4,7 @@ const openingHour = require('./../../controllers/openingHour');
 const channel = require('./../../controllers/channel');
 const entity = require('./../../controllers/entity');
 const helper = require('./../../controllers/helper');
+const dbPool = require('../../controllers/db');
 require('datejs');
 //var Q = require('q');
 // Setup router for protected routes
@@ -202,6 +203,35 @@ protectedRouter.get('/insertTestData', function (req, res) {
     console.log('DONE INSERTING');
 });
 
+
+protectedRouter.get('/open',  async function (req, res) {
+    try {
+        var datetimeFrom = req.params.from || helper.formatDateFromJs(new Date());
+        var todate = new Date();
+        todate.setDate(todate.getDate() + 7);
+        var datetimeTo = req.params.to || helper.formatDateFromJs(todate);
+        var entities =  await entity.loadEntities();
+        var channels =  await channel.loadChannels();
+        var openchannels = {};
+        const [results, fields] = await
+        dbPool.query('SELECT * ' +
+            'FROM opening_hours ' +
+            '   WHERE day >= ?' +
+            '   AND day <= ?' +
+            'ORDER BY day ASC, start_time ASC',
+            [
+                datetimeFrom,
+                datetimeTo
+            ]);
+        var openChannels = await helper.transformQueryResultsToOrgChannelDaysOutput(results);
+        console.log(openChannels);
+        res.render('openoverzicht',{
+            entities: openChannels
+        });
+    } catch (err) {
+        console.error(err)
+    }
+});
 
 protectedRouter.get('/channels',  async function (req, res) {
     try {

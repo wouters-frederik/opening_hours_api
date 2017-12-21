@@ -1,0 +1,38 @@
+{{> navbar}}
+
+<div class="container">
+    <div class="row">
+        <h1>Momenteel geopend</h1>
+    {{#each entities}}
+        <h3>{{ name }} ({{ remote_id }})</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">kanaal</th>
+                <th scope="col">open</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each channels}}
+                <tr>
+                    <td>{{ name }}</td>
+                    <td>
+                    {{#each days as |day index|}}
+
+                        {{#each day}}
+                            <div>
+                                {{formatTime fromTime 'HH:mm'}} - {{formatTime toTime 'HH:mm'}}
+                            </div>
+                        {{/each}}
+
+                    {{/each}}
+                    </td>
+                </tr>
+            {{/each}}
+
+            </tbody>
+        </table>
+
+    {{/each}}
+    </div>
+</div>
