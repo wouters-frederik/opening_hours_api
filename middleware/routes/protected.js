@@ -62,6 +62,7 @@ protectedRouter.get('/', async function (req, res) {
 
     var monday = $startofweek;
     var tuesday = $startofweek.clone().add(1).days();
+    
     var wednesday = $startofweek.clone().add(2).days();
     var thursday = $startofweek.clone().add(3).days();
     var friday = $startofweek.clone().add(4).days();
@@ -78,7 +79,6 @@ protectedRouter.get('/', async function (req, res) {
     } catch (err) {
         console.error(err)
     }
-    console.log(tuesdayslots);
     console.log(tuesdayslots);
 
         //initialization
@@ -287,21 +287,19 @@ protectedRouter.post('/openinghours',  async function (req, res) {
         // console.log(oh.start_time.substr(0,2));
         // console.log(oh.start_time.substr(3,2));
         var startTime = Date.today().set({
-            month: parseInt(day.toString('MM')),
+            month: parseInt(day.toString('mm')),
             day: parseInt(day.toString('dd')),
             year: parseInt(day.toString('yyyy')),
             hour: parseInt(oh.start_time.substr(0,2)),
             minute: parseInt(oh.start_time.substr(3,2))
         });
         var endTime = Date.today().set({
-            month: parseInt(day.toString('MM')),
+            month: parseInt(day.toString('mm')),
             day: parseInt(day.toString('dd')),
             year: parseInt(day.toString('yyyy')),
             hour: parseInt(oh.end_time.substr(0,2)),
             minute: parseInt(oh.end_time.substr(3,2))
         });
-        console.log(startTime.toISOString());
-        console.log(endTime.toISOString());
 
          var id =  await openingHour.createOpeningsUur(oh.entity_id,oh.channel_id,oh.day, startTime.getTime() / 1000, endTime.getTime() / 1000);
         // var status =  await openingHour.deleteOpeningHour(req.params.id);
