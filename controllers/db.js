@@ -10,9 +10,7 @@ const connectionOpts = process.env.CLEARDB_DATABASE_URL || {
   canRetry: true
 };
 
-var dbPool =   mysql.createPool(connectionOpts);
-
-
+var dbPool =  mysql.createPool(connectionOpts);
 
 // Attempt to catch disconnects
 dbPool.on('connection', function (connection) {

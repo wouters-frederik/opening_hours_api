@@ -4,6 +4,7 @@ const dbPool = require('../../controllers/db');
 const entity = require('../../controllers/entity');
 const channel = require('../../controllers/channel');
 const helper = require('./../../controllers/helper');
+const auth = require('./../../controllers/auth');
 // Setup router for public
 var router = express.Router();              // get an instance of the express Router
 
@@ -177,7 +178,7 @@ router.get('/open', async function (req, res) {
         ]);
         var $outputArray = {};
 
-        await helper.asyncForeach(results, async (item) => {
+        await helper.asyncForEach(results, async (item) => {
             if (typeof $outputArray[item.entity_id] == 'undefined') {
 
                 var entityObject =  await entity.loadEntity(item.entity_id);
@@ -206,6 +207,8 @@ router.get('/entities', async function (req, res) {
 }
 )
 ;
+
+
 
 router.get('/entities/:entity_id', async function (req, res) {
     try {

@@ -5,13 +5,14 @@ const channel = require('./../../controllers/channel');
 const entity = require('./../../controllers/entity');
 const helper = require('./../../controllers/helper');
 const dbPool = require('../../controllers/db');
+const auth = require('./../../controllers/auth');
 require('datejs');
 //var Q = require('q');
 // Setup router for protected routes
 var protectedRouter = express.Router();
 
 // HTML endpoints
-protectedRouter.get('/', async function (req, res) {
+protectedRouter.get('/', auth.authorize, async function (req, res) {
   //if param does not exist//
 
     if (typeof req.query.week == 'undefined') {
@@ -62,7 +63,7 @@ protectedRouter.get('/', async function (req, res) {
 
     var monday = $startofweek;
     var tuesday = $startofweek.clone().add(1).days();
-    
+
     var wednesday = $startofweek.clone().add(2).days();
     var thursday = $startofweek.clone().add(3).days();
     var friday = $startofweek.clone().add(4).days();
@@ -158,7 +159,7 @@ var strippedUrl = req.originalUrl.substring(0,req.originalUrl.indexOf('?'));
 
 });
 
-protectedRouter.get('/insertTestData', function (req, res) {
+protectedRouter.get('/insertTestData', auth.authorize, function (req, res) {
 
     var $startofweek = new Date();
     var days = {};
@@ -208,7 +209,7 @@ protectedRouter.get('/insertTestData', function (req, res) {
 });
 
 
-protectedRouter.get('/open',  async function (req, res) {
+protectedRouter.get('/open', auth.authorize,  async function (req, res) {
     try {
         var datetime = req.params.timestamp || Math.floor(Date.now() / 1000);
         var huidigeDag = helper.formatDateFromUnix(datetime);
@@ -253,7 +254,7 @@ protectedRouter.get('/open',  async function (req, res) {
     }
 });
 
-protectedRouter.get('/channels',  async function (req, res) {
+protectedRouter.get('/channels',  auth.authorize, async function (req, res) {
     try {
         var channels =  await channel.loadChannels();
         res.render('channels',{
@@ -264,7 +265,7 @@ protectedRouter.get('/channels',  async function (req, res) {
     }
 });
 
-protectedRouter.delete('/openinghours/:id',  async function (req, res) {
+protectedRouter.delete('/openinghours/:id',  auth.authorize, async function (req, res) {
     try {
         var status =  await openingHour.deleteOpeningHour(req.params.id);
         res.setHeader('Content-Type', 'application/json');
@@ -273,7 +274,7 @@ protectedRouter.delete('/openinghours/:id',  async function (req, res) {
         console.error(err)
     }
 });
-protectedRouter.post('/openinghours',  async function (req, res) {
+protectedRouter.post('/openinghours',  auth.authorize, async function (req, res) {
     try {
         //console.log(req.body);
         var oh = req.body;
@@ -311,7 +312,7 @@ protectedRouter.post('/openinghours',  async function (req, res) {
 });
 
 
-protectedRouter.get('/entities', async function (req, res) {
+protectedRouter.get('/entities',auth.authorize,  async function (req, res) {
     try {
         var entities =  await entity.loadEntities();
         res.render('entities',{
