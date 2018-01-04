@@ -91,10 +91,6 @@ router.get('/open/:entity_id/:channel_id', async function (req, res) {
     //optionele url parameter: timestamp (toon status on timestamp).
     var datetime = req.params.timestamp || Math.floor(Date.now() / 1000);
     var huidigeDag = helper.formatDateFromUnix(datetime);
-    // console.log(datetime);
-    // console.log(huidigeDag);
-    // console.log(req.params.entity_id);
-    // console.log(req.params.channel_id);
     const [results,fields] = await dbPool.query('SELECT count(id) as existing FROM opening_hours ' +
         'WHERE entity_id = ?  AND channel_id = ?  AND day = ?  AND start_time <= ?  AND end_time >= ?',
         [
@@ -162,10 +158,6 @@ router.get('/open', async function (req, res) {
     //optionele url parameter: timestamp (toon status on timestamp).
     var datetime = req.params.timestamp || Math.floor(Date.now() / 1000);
     var huidigeDag = helper.formatDateFromUnix(datetime);
-    // console.log(datetime);
-    // console.log(huidigeDag);
-    // console.log(req.params.entity_id);
-    // console.log(req.params.channel_id);
     var channels = await channel.loadChannels();
     var entities = await entity.loadEntities();
 
@@ -213,7 +205,6 @@ router.get('/entities', async function (req, res) {
 router.get('/entities/:entity_id', async function (req, res) {
     try {
         var $entity = await entity.loadEntity(req.params.entity_id);
-        console.log($entity);
         res.json({entity: $entity});
     } catch (err) {
         console.error(err)

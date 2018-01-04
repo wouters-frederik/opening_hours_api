@@ -16,7 +16,7 @@ exports.login = function(req, res, next) {
         res.redirect('/ui');
     }
     else {
-        res.redirect('/login?creds');
+        res.redirect('/login?userName='+postUserName + '&error=credentials');
     }
 
     // User.authenticate(email, pass, function(err, user) {

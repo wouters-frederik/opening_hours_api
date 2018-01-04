@@ -87,7 +87,6 @@ module.exports = {
 
   transformQueryResultsToChannelDaysOutput: async function (results) {
     var $days = {};
-    console.log('transformQueryResultsToChannelDaysOutput');
         await asyncForEach(results, async function(item){
           if (typeof $days[item.channel_id] == 'undefined') {
             var channelObject =  await channel.loadChannel(item.channel_id);
@@ -108,15 +107,12 @@ module.exports = {
               });
     });
 
-    console.log('$days');
-    console.log($days);
     return $days;
   },
 
   transformQueryResultsToDaysOutput: function transformQueryResultsToDaysOutput (results) {
     var $days = {};
     results.forEach(function (item) {
-      //console.log(item);
         var formatted = formatDateFromJs(item.day);
       if (typeof $days[formatted] == 'undefined') {
         $days[formatted] = [];

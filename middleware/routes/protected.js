@@ -80,7 +80,6 @@ protectedRouter.get('/', auth.authorize, async function (req, res) {
     } catch (err) {
         console.error(err)
     }
-    console.log(tuesdayslots);
 
         //initialization
 
@@ -178,7 +177,6 @@ protectedRouter.get('/insertTestData', auth.authorize, function (req, res) {
 
         openingHour.getOpeningHoursOfDay(1,1,date, function(error, items){
             items.forEach(function(slot){
-                console.log(slot);
                 openingHour.deleteOpeningHour(slot.id);
             });
 
@@ -204,8 +202,6 @@ protectedRouter.get('/insertTestData', auth.authorize, function (req, res) {
         }
     });
 
-
-    console.log('DONE INSERTING');
 });
 
 
@@ -213,10 +209,6 @@ protectedRouter.get('/open', auth.authorize,  async function (req, res) {
     try {
         var datetime = req.params.timestamp || Math.floor(Date.now() / 1000);
         var huidigeDag = helper.formatDateFromUnix(datetime);
-        // console.log(datetime);
-        // console.log(huidigeDag);
-        // console.log(req.params.entity_id);
-        // console.log(req.params.channel_id);
         var channels = await channel.loadChannels();
         var entities = await entity.loadEntities();
 
@@ -276,17 +268,11 @@ protectedRouter.delete('/openinghours/:id',  auth.authorize, async function (req
 });
 protectedRouter.post('/openinghours',  auth.authorize, async function (req, res) {
     try {
-        //console.log(req.body);
         var oh = req.body;
         //transform start_time to UNIX timestamp
         //transform end_time to unix timestamp
         //var startTime = var birthDayParty = {month: 1, day: 20, hour: 20, minute: 30};
         var day = new Date(oh.day);
-        // console.log(day.toString('MM'));
-        // console.log(day.toString('dd'));
-        // console.log(day.toString('yyyy'));
-        // console.log(oh.start_time.substr(0,2));
-        // console.log(oh.start_time.substr(3,2));
         var startTime = Date.today().set({
             month: parseInt(day.toString('mm')),
             day: parseInt(day.toString('dd')),
