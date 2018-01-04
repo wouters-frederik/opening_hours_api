@@ -9,7 +9,7 @@
         <th scope="col">ID</th>
         <th scope="col">naam organisatie</th>
         <th scope="col">externe referentie</th>
-        <th scope="col">toegalaten kanalen</th>
+        <th scope="col">Aangemaakt</th>
         <th scope="col"></th>
       </tr>
       </thead>
@@ -19,7 +19,10 @@
             <th scope="row">{{id}}</th>
             <td>{{ name }}</td>
             <td>{{ remote_id }}</td>
-            <td>{{ created   }}</td><td>{{ created_by }}</td>
+              <td>{{#if created}}
+                  {{   formatTime created_Date 'dd/MM/yyyy' }}
+              {{/if}}
+                  (by {{ user_name }})</td>
             <td><a href="javascript://" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
               <a href="javascript://" title="delete"><i class="fa fa-trash" aria-hidden="true"></i>
               </a>

@@ -249,8 +249,26 @@ protectedRouter.get('/open', auth.authorize,  async function (req, res) {
 protectedRouter.get('/channels',  auth.authorize, async function (req, res) {
     try {
         var channels =  await channel.loadChannels();
+
+        for (var index in channels) {
+            var channelItem = channels[index];
+            channelItem.created_Date = new Date(channelItem.created * 1000);
+        }
         res.render('channels',{
           channels: channels
+        });
+    } catch (err) {
+        console.error(err)
+    }
+});
+protectedRouter.post('/channels',  auth.authorize, async function (req, res) {
+    try {
+        console.log('creating/updating channel');
+        var data = req.body;
+        console.log(data);
+        var channelId = channel.createChannel(data.channelName,req.session.user.id);
+        res.render('channels',{
+            channels: channels
         });
     } catch (err) {
         console.error(err)
@@ -266,6 +284,21 @@ protectedRouter.delete('/openinghours/:id',  auth.authorize, async function (req
         console.error(err)
     }
 });
+
+protectedRouter.delete('/channels/:id',  auth.authorize, async function (req, res) {
+    try {
+        console.log('delete channel');
+        var success = await channel.deleteChannel(req.params.id);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ success: (!!success)?'deleted':'did not exist' }));
+    } catch (err) {
+        console.error(err)
+    }
+});
+
+// protectedRouter.post('/channel',  auth.authorize, async function (req, res) {
+//
+// });
 protectedRouter.post('/openinghours',  auth.authorize, async function (req, res) {
     try {
         var oh = req.body;
@@ -301,6 +334,10 @@ protectedRouter.post('/openinghours',  auth.authorize, async function (req, res)
 protectedRouter.get('/entities',auth.authorize,  async function (req, res) {
     try {
         var entities =  await entity.loadEntities();
+        for (var index in entities) {
+            var entityItem = entities[index];
+            entityItem.created_Date = new Date(entityItem.created * 1000);
+        }
         res.render('entities',{
             entities: entities
         });

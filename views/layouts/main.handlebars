@@ -141,8 +141,67 @@
                     alert('dit werkt nog niet. HElaas :)');
                 }
             });
+
+            $('.delete-channel').click(function(){
+                var $this = $(this);
+                var $id = $this.attr('data-channel-id');
+                console.log('delete', $id);
+                $.ajax({
+                    url: '/ui/channels/' + $id,
+                    type: 'DELETE',
+                    success: function(result) {
+                        location.reload();
+                    }
+                });
+            });
+            $('.updateChannel').submit(function(){
+                console.log('submitted.');
+                event.preventDefault();
+                var $form = $(this);
+                var $start = $form.find('#channelName').val();
+                if ($start == '') {
+                    alert('Please fill in the channel name.');
+                }else{
+                    var $formdata = $form.serializeArray();
+                    var $url = $form.attr('data-create-url');
+                    console.log('submitting to',$url);
+                    console.log($formdata);
+                    $.ajax({
+                        url: $url,
+                        type: 'POST',
+                        data: $formdata
+                        //context: document.body
+                    }).done(function () {
+                        location.reload();
+                    });
+                }
+
+            });
+            $('.edit-channel').click(function(){
+                var $this = $(this);
+                var $id = $this.attr('data-channel-id');
+                var $name = $this.attr('data-channel-name');
+                console.log('edit', $id, $name);
+//                var data = {
+//                    name: $name,
+//                }
+//                $.ajax({
+//                    url: '/ui/channels/' + $id,
+//                    type: 'PUT',
+//                    data: data,
+//                    success: function(result) {
+//                        location.reload();
+//                    }
+//                });
+
+            });
         } );
 
+
+        // Every time a modal is shown, if it has an autofocus element, focus on it.
+        $('.modal').on('shown.bs.modal', function() {
+            $(this).find('[autofocus]').focus();
+        });
 
 
 
