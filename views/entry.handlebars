@@ -34,15 +34,13 @@
                         <input type="hidden" value="{{week}}" name="week">
                         <select class="entityChooser" id="entityChooser" name="entity">
                             {{#each entities}}
-                                <option value="{{ id }}" {{isSelected id ../curEntity }}>{{ name }}</option>
+                                <optgroup label="{{ name }}">
+                                    {{#each ../channels}}
+                                        <option value="{{../id}}-{{ id }}" {{compareEntityChannel id ../../curChannel ../id ../../curEntity }} >{{ ../name }} {{ name }}</option>
+                                    {{/each}}
+                                </optgroup>
                             {{/each}}
                         </select>
-                        <select class="channelChooser" id="channelChooser" name="channel">
-                            {{#each channels}}
-                                <option value="{{ id }}" {{isSelected id ../curChannel }} >{{ name }}</option>
-                            {{/each}}
-                        </select>
-                        <input type="submit" value="verander kanaal">
                     </div>
                 </div>
 

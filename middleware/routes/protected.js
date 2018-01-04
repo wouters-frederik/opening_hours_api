@@ -267,9 +267,20 @@ protectedRouter.post('/channels',  auth.authorize, async function (req, res) {
         var data = req.body;
         console.log(data);
         var channelId = channel.createChannel(data.channelName,req.session.user.id);
-        res.render('channels',{
-            channels: channels
-        });
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ success: (!!channelId)?'created':'could not create' }));
+    } catch (err) {
+        console.error(err)
+    }
+});
+protectedRouter.post('/entities',  auth.authorize, async function (req, res) {
+    try {
+        console.log('creating/updating entity');
+        var data = req.body;
+        console.log(data);
+        var entityId = entity.createEntity(data.entityName,data.entityReference,req.session.user.id);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ success: (!!entityId)?'created':'could not create' }));
     } catch (err) {
         console.error(err)
     }
@@ -287,8 +298,16 @@ protectedRouter.delete('/openinghours/:id',  auth.authorize, async function (req
 
 protectedRouter.delete('/channels/:id',  auth.authorize, async function (req, res) {
     try {
-        console.log('delete channel');
         var success = await channel.deleteChannel(req.params.id);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ success: (!!success)?'deleted':'did not exist' }));
+    } catch (err) {
+        console.error(err)
+    }
+});
+protectedRouter.delete('/entities/:id',  auth.authorize, async function (req, res) {
+    try {
+        var success = await entity.deleteEntity(req.params.id);
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({ success: (!!success)?'deleted':'did not exist' }));
     } catch (err) {

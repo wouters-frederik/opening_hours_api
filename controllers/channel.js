@@ -19,9 +19,7 @@ async function loadChannel (searchId) {
     return rows[0];
 }
 async function deleteChannel (searchId) {
-    console.log('deleting');
     var res = await dbPool.query('DELETE FROM channels WHERE id = ? ', [parseInt(searchId)]);
-    console.log('done');
     return true;
 }
 

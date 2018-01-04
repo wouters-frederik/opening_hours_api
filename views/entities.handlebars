@@ -23,15 +23,57 @@
                   {{   formatTime created_Date 'dd/MM/yyyy' }}
               {{/if}}
                   (by {{ user_name }})</td>
-            <td><a href="javascript://" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-              <a href="javascript://" title="delete"><i class="fa fa-trash" aria-hidden="true"></i>
-              </a>
-            </td>
+              <td><a href="javascript://" class="edit-entity" title="edit" data-entity-id="{{ id }}"  data-entity-name="{{ name }}" data-entity-remote_id="{{ remote_id }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                  <a href="javascript://" class="delete-entity" title="delete" data-entity-id="{{ id }}"><i class="fa fa-trash" aria-hidden="true"></i>
+                  </a>
+              </td>
           </tr>
         {{/each}}
-
-
       </tbody>
     </table>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createEntityModal">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add Entity
+      </button>
   </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="createEntityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kanaal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="updateEntity" action="/ui/channels" method="post" data-create-url="/ui/entities" class="updateEntity">
+                <div class="modal-body">
+
+                    <input name="channelId" type="hidden" class="" id="channelId" value="">
+                    <input name="channelcreatedBy" type="hidden" class="" id="channelCreatedBy" value="">
+                    <input name="channelCreatedStamp" type="hidden" class="" id="channelCreatedTime" value="">
+                    <div class="form-group">
+                        <label for="entityName">Entity name</label>
+                        <input name="entityName" type="text" value="" class="form-control" id="entityName" aria-describedby="entityNameHelp" placeholder="Entity name here" autofocus required>
+                        <!--<small id="channelNameHelp" class="form-text text-muted">The name of the entity</small>-->
+                    </div>
+                    <div class="form-group">
+                        <label for="entityReference">External reference</label>
+                        <input name="entityReference" type="text" value="" class="form-control" id="entityReference" aria-describedby="entityReferenceHelp" placeholder="external reference here">
+                        <small id="entityReferenceHelp" class="form-text text-muted">This is optional. bijvoorbeeld de ID uit het organisatieregister, dienstverleningsregister of wat dan nog.</small>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

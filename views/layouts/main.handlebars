@@ -76,6 +76,19 @@
 
     $(document).ready(function () {
 
+        $('#entityChooser').change(function(){
+            var $this = $(this);
+            var val = $this.val();
+            console.log(val);
+            console.log(val.substr(val.indexOf('-')+1));
+            var channel = val.substr(val.indexOf('-')+1);
+            var entity = val.substr(0,val.indexOf('-'));
+            var url = new URL(window.location);
+            var week = url.searchParams.get("week");
+            console.log(week,channel,entity);
+            window.location = url.pathname + '?week=' + week + '&entity=' + entity +'&channel=' + channel;
+        });
+
                 $('.delete-timeslot').click(function (item) {
                     var $url = $(this).attr('data-delete-url');
                     $.ajax({
@@ -116,7 +129,6 @@
 
         $( function() {
             $( ".datetimepicker1" ).datepicker({
-
                 showOtherMonths: true,
                 selectOtherMonths: true,
                 defaultDate: new Date($(this).parents('form').find('#week').val()),
@@ -154,6 +166,18 @@
                     }
                 });
             });
+            $('.delete-entity').click(function(){
+                var $this = $(this);
+                var $id = $this.attr('data-entity-id');
+                console.log('delete', $id);
+                $.ajax({
+                    url: '/ui/entities/' + $id,
+                    type: 'DELETE',
+                    success: function(result) {
+                        location.reload();
+                    }
+                });
+            });
             $('.updateChannel').submit(function(){
                 console.log('submitted.');
                 event.preventDefault();
@@ -175,7 +199,29 @@
                         location.reload();
                     });
                 }
+            });
 
+            $('.updateEntity').submit(function(){
+                console.log('submitted.');
+                event.preventDefault();
+                var $form = $(this);
+                var $start = $form.find('#EntityName').val();
+                if ($start == '') {
+                    alert('Please fill in the Entity name.');
+                }else{
+                    var $formdata = $form.serializeArray();
+                    var $url = $form.attr('data-create-url');
+                    console.log('submitting to',$url);
+                    console.log($formdata);
+                    $.ajax({
+                        url: $url,
+                        type: 'POST',
+                        data: $formdata
+                        //context: document.body
+                    }).done(function () {
+                        location.reload();
+                    });
+                }
             });
             $('.edit-channel').click(function(){
                 var $this = $(this);

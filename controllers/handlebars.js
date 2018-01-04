@@ -6,6 +6,9 @@ var register = function(Handlebars) {
         isSelected: function(p1, p2) {
             return parseInt(p1) === parseInt(p2) ? 'selected' : '';
         },
+        compareEntityChannel: function(e1, e2, c1,c2) {
+            return (parseInt(e1) === parseInt(e2) && parseInt(c1) === parseInt(c2)) ? 'selected' : '';
+        },
         formatTime: function(p1, format) {
             return p1.toString(format);
         },
