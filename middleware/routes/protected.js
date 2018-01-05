@@ -51,9 +51,9 @@ protectedRouter.get('/', auth.authorize, async function (req, res) {
         var monday = Date.today().last().monday()
     }
     if (monday.toString("M/d/yyyy")  == $startofweek.toString("M/d/yyyy")){
-        curWeekText = 'Deze week';
+        curWeekText = 'This week';
     } else {
-        curWeekText = 'De week van ' + $startofweek.toString("d MMMM");
+        curWeekText = 'week ' + $startofweek.toString("d MMMM");
     }
 
 
@@ -142,6 +142,7 @@ var strippedUrl = req.originalUrl.substring(0,req.originalUrl.indexOf('?'));
             nextLink: '?week=' + $startNextWeek.toString('yyyy-MM-dd') + '&entity=' + curEntityId + '&channel=' + curChannelId,
             curWeekTextString: curWeekText,
             curWeekTimeString: $startofweekString,
+            nextweekTimeString: $startNextWeek.toString('yyyy-MM-dd'),
             weekdays: weekdays,
             formattedVandaag: formattedVandaag,
             entities:entities,
@@ -314,6 +315,8 @@ protectedRouter.delete('/entities/:id',  auth.authorize, async function (req, re
         console.error(err)
     }
 });
+
+
 
 // protectedRouter.post('/channel',  auth.authorize, async function (req, res) {
 //
