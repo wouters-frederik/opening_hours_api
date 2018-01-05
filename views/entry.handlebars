@@ -48,7 +48,7 @@
 
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-sm-8 weekskipper">
+                        <div class="col-sm-7 weekskipper">
 
 
                             <a href="{{ prevLink }}" title="vorige week"><i class="fa fa-arrow-left"
@@ -60,42 +60,20 @@
                                                                               aria-hidden="true"></i></a>
                         </div>
 
-                        <div class="col-sm-3">
-                            <form class="actions" id="actions" method="get" action="{{strippedUrl}}">
+                        <div class="col-sm-4">
                             <div class='input-group date' id=''>
-                                <input type="hidden" id="entity" name="entity" value="{{curEntity}}">
-                                <input type="hidden" id="channel" name="channel" value="{{curChannel}}">
-
-                                <input type="hidden" id="week" name="week" value="{{curWeekTimeString}}">
-                                <input type='text' class="form-control datetimepicker1" size="8" value="{{curWeekTimeString}}"/>
-                                <span class="input-group-addon">
-                                        <a href="javascript:" class="opendatepicker" title="selecteer een datum"><i class="fa fa-calendar-o"
-                                                                                             aria-hidden="true"></i></a>
-                                     </span>
-
-
-                                <ul id="actions-menu">
-                                    <li>
-                                        <a href="javascript://" title="actions"><i class="fa fa-cog" aria-hidden="true"></i></a>
-                                        <ul>
-                                            <li>
-                                                <a href="javascript://">Kopieer naar toekomst</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript://">Kopieer naar ander kanaal</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                </ul>
-                                <!--<a href="javascript:" title="kopieren van dit schema naar de volgende weken tot"><i-->
-                                        <!--class="fa fa-files-o" aria-hidden="true"></i></a>-->
-
-                                <!--<a href="javascript:" title="spring naar week"><i class="fa fa-search"-->
-                                                                                  <!--aria-hidden="true"></i></a>-->
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#jumpModal">
+                                        <i class="fa fa-search" aria-hidden="true"></i> Jump
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#copyChannelModal">
+                                        <i class="fa fa-files-o" aria-hidden="true"></i> Copy
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#emptyChannelModal">
+                                        <i class="fa fa-eraser" aria-hidden="true"></i> Empty
+                                    </button>
+                                </div>
                             </div>
-                            </form>
-
                         </div>
                     </div>
                 </div>
@@ -160,6 +138,143 @@
         </div>
         <div class="col">
 
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- emptyChannelModal Modal -->
+<div class="modal fade" id="jumpModal" tabindex="-1" role="dialog" aria-labelledby="jumpModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Jump to week</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="actions" id="actions" method="get" action="{{strippedUrl}}">
+                <div class="modal-body">
+
+                    <div class='input-group date' id=''>
+                        <input type="hidden" id="entity" name="entity" value="{{curEntity}}">
+                        <input type="hidden" id="channel" name="channel" value="{{curChannel}}">
+
+                        <input type="hidden" id="week" name="week" value="{{curWeekTimeString}}">
+                        <input type='text' class="form-control datetimepicker1" size="8" value="{{curWeekTimeString}}"/>
+                        <span class="input-group-addon">
+                                        <a href="javascript:" class="opendatepicker" title="selecteer een datum"><i class="fa fa-calendar-o"
+                                                                                                                    aria-hidden="true"></i></a>
+                                     </span>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Empty</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- emptyChannelModal Modal -->
+<div class="modal fade" id="emptyChannelModal" tabindex="-1" role="dialog" aria-labelledby="emptyChannelModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Empty</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="copyChannel" action="/ui/emptychannel" method="post" data-create-url="/ui/emptychannel" class="copyChannel">
+                <div class="modal-body">
+                    <p>Are you sure you want to empty week ?</p>
+                    <input name="channelId" type="hidden" class="" id="channelId" value="">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Empty</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- copyChannelModal Modal -->
+<div class="modal fade" id="copyChannelModal" tabindex="-1" role="dialog" aria-labelledby="copyChannelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Copy</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="copyChannel" action="/ui/copychanneldata" method="post" data-create-url="/ui/copychannel" class="copyChannel">
+                <div class="modal-body">
+
+                    <input name="channelId" type="hidden" class="" id="channelId" value="">
+                    <input name="channelcreatedBy" type="hidden" class="" id="channelCreatedBy" value="">
+                    <input name="channelCreatedStamp" type="hidden" class="" id="channelCreatedTime" value="">
+                    <div class="form-group">
+                        <label for="channelName">From</label>
+                        <select class="entityChooser" id="entityChooser" name="fromEntity">
+                            {{#each entities}}
+                                <optgroup label="{{ name }}">
+                                    {{#each ../channels}}
+                                        <option value="{{../id}}-{{ id }}" {{compareEntityChannel id ../../curChannel ../id ../../curEntity }} >{{ ../name }} -  {{ name }}</option>
+                                    {{/each}}
+                                </optgroup>
+                            {{/each}}
+                        </select>
+                        <small id="channelNameHelp" class="form-text text-muted"></small>
+                        <br>
+                        week <input name="fromWeek" type='text' readonly class=" datetimepicker2" size=14" value="{{curWeekTimeString}}"/>
+                        <br>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label for="channelName"> To </label>
+                        <select class="entityChooser" id="entityChooser" name="toEntity">
+                            {{#each entities}}
+                                <optgroup label="{{ name }}">
+                                    {{#each ../channels}}
+                                        <option value="{{../id}}-{{ id }}" {{compareEntityChannel id ../../curChannel ../id ../../curEntity }} >{{ ../name }} -  {{ name }}</option>
+                                    {{/each}}
+                                </optgroup>
+                            {{/each}}
+                        </select>
+                        <!--<small id="channelNameHelp" class="form-text text-muted">De naam vanhet kanaal (bv chat, mail, shedule a call,...)</small>-->
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <label for="channelName"> fill from </label>
+                        <input name="toWeekSTart" type='text' class="datetimepicker3" size="14" value="{{curWeekTimeString}}"/> to
+                        <input name="toWeekEnd" type='text' class=" datetimepicker3" size="14" value="{{nextweekTimeString}}"/>
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Copy</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
