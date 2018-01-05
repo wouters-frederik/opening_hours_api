@@ -14,12 +14,19 @@ var protectedRouter = express.Router();
 // HTML endpoints
 protectedRouter.get('/', auth.authorize, async function (req, res) {
   //if param does not exist//
-
+    try {
+        var channels =  await channel.loadChannels();
+        var entities = await entity.loadEntities();
+    } catch (err) {
+        console.error(err)
+    }
+    // console.log(channels[0].id);
+    // console.log(entities[0].id);
     if (typeof req.query.week == 'undefined') {
         //$startofweek = this monday
         //redirect to this route with ?week=$startofweek
         res.writeHead(302, {
-            'Location': '?entity=1&channel=1&week=' + helper.getMonday(new Date()).toString('yyyy-MM-dd')
+            'Location': '?entity='+entities[0].id+'&channel='+channels[0].id+'&week=' + helper.getMonday(new Date()).toString('yyyy-MM-dd')
             //add other headers here...
         });
         res.end();
@@ -27,12 +34,7 @@ protectedRouter.get('/', auth.authorize, async function (req, res) {
     }
 
 
-    try {
-        var channels =  await channel.loadChannels();
-        var entities = await entity.loadEntities();
-    } catch (err) {
-        console.error(err)
-    }
+
     var weekdays = {};
     var $startofweekString = req.query.week;
     var $startofweek = new Date($startofweekString);
@@ -61,14 +63,14 @@ protectedRouter.get('/', auth.authorize, async function (req, res) {
     var curEntityId = req.query.entity || 1;
     var curChannelId = req.query.channel || 1;
 
-    var monday = $startofweek;
-    var tuesday = $startofweek.clone().add(1).days();
+    var monday = $startofweek.set({ hour: 0, minute: 0 });
+    var tuesday = $startofweek.clone().add(1).days().set({ hour: 0, minute: 0 });
 
-    var wednesday = $startofweek.clone().add(2).days();
-    var thursday = $startofweek.clone().add(3).days();
-    var friday = $startofweek.clone().add(4).days();
-    var saturday = $startofweek.clone().add(5).days();
-    var sunday = $startofweek.clone().add(6).days();
+    var wednesday = $startofweek.clone().add(2).days().set({ hour: 0, minute: 0 });
+    var thursday = $startofweek.clone().add(3).days().set({ hour: 0, minute: 0 });
+    var friday = $startofweek.clone().add(4).days().set({ hour: 0, minute: 0 });
+    var saturday = $startofweek.clone().add(5).days().set({ hour: 0, minute: 0 });
+    var sunday = $startofweek.clone().add(6).days().set({ hour: 0, minute: 0 });
     try {
         var mondaySlots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,monday);
         var tuesdayslots =  await openingHour.getOpeningHoursOfDay(curEntityId,curChannelId,tuesday);
@@ -224,7 +226,6 @@ protectedRouter.get('/open', auth.authorize,  async function (req, res) {
 
         await helper.asyncForEach(results, async (item) => {
             if (typeof $outputArray[item.entity_id] == 'undefined') {
-
             var entityObject =  await entity.loadEntity(item.entity_id);
             entityObject.channels = {};
             $outputArray[item.entity_id] = entityObject;
@@ -286,16 +287,15 @@ protectedRouter.post('/entities',  auth.authorize, async function (req, res) {
         console.error(err)
     }
 });
+
+
 protectedRouter.post('/emptychannel',  auth.authorize, async function (req, res) {
     try {
         var data = req.body;
-        console.log(data);
-        //data.channel
-        //data.entity
-        //data.week
         var startOfWeek = new Date(data.week).set({ hour: 0, minute: 0 });
         var endOfWeek  = new Date(data.week).add(7).days().set({ hour: 0, minute: 0 });
-
+        console.log(startOfWeek);
+        console.log(endOfWeek);
         var slots = await openingHour.getOpeningHoursInRange(data.entity, data.channel, Math.floor(startOfWeek.getTime()/1000), Math.floor(endOfWeek.getTime()/1000));
         var count = 0;
         for(index in slots) {
@@ -353,14 +353,14 @@ protectedRouter.post('/openinghours',  auth.authorize, async function (req, res)
         //var startTime = var birthDayParty = {month: 1, day: 20, hour: 20, minute: 30};
         var day = new Date(oh.day);
         var startTime = Date.today().set({
-            month: parseInt(day.toString('mm')),
+            month: parseInt(day.toString('MM') - 1),
             day: parseInt(day.toString('dd')),
             year: parseInt(day.toString('yyyy')),
             hour: parseInt(oh.start_time.substr(0,2)),
             minute: parseInt(oh.start_time.substr(3,2))
         });
         var endTime = Date.today().set({
-            month: parseInt(day.toString('mm')),
+            month: parseInt(day.toString('MM')- 1),
             day: parseInt(day.toString('dd')),
             year: parseInt(day.toString('yyyy')),
             hour: parseInt(oh.end_time.substr(0,2)),
