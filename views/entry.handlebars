@@ -145,7 +145,7 @@
 
 
 
-<!-- emptyChannelModal Modal -->
+<!-- jumpModal Modal -->
 <div class="modal fade" id="jumpModal" tabindex="-1" role="dialog" aria-labelledby="jumpModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -195,10 +195,14 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="copyChannel" action="/ui/emptychannel" method="post" data-create-url="/ui/emptychannel" class="copyChannel">
+            <form id="copyChannel" action="/ui/emptychannel" method="post" data-create-url="/ui/emptychannel" class="emptyChannel">
                 <div class="modal-body">
                     <p>Are you sure you want to empty week ?</p>
-                    <input name="channelId" type="hidden" class="" id="channelId" value="">
+                    <input type="hidden" id="entity" name="entity" value="{{curEntity}}">
+                    <input type="hidden" id="channel" name="channel" value="{{curChannel}}">
+                    <input type="hidden" id="week" name="week" value="{{curWeekTimeString}}">
+                    <input type="hidden" id="fromUrl" name="fromUrl" value="{{url}}">
+
 
                 </div>
                 <div class="modal-footer">

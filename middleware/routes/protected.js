@@ -286,6 +286,30 @@ protectedRouter.post('/entities',  auth.authorize, async function (req, res) {
         console.error(err)
     }
 });
+protectedRouter.post('/emptychannel',  auth.authorize, async function (req, res) {
+    try {
+        var data = req.body;
+        console.log(data);
+        //data.channel
+        //data.entity
+        //data.week
+        var startOfWeek = new Date(data.week).set({ hour: 0, minute: 0 });
+        var endOfWeek  = new Date(data.week).add(7).days().set({ hour: 0, minute: 0 });
+
+        var slots = await openingHour.getOpeningHoursInRange(data.entity, data.channel, Math.floor(startOfWeek.getTime()/1000), Math.floor(endOfWeek.getTime()/1000));
+        var count = 0;
+        for(index in slots) {
+            var slot = slots[index];
+            var result = await openingHour.deleteOpeningHour(slot.id);
+            count ++;
+        }
+        res.redirect(data.fromUrl);
+        //redirect back.
+    } catch (err) {
+        console.error(err)
+    }
+});
+
 
 protectedRouter.delete('/openinghours/:id',  auth.authorize, async function (req, res) {
     try {

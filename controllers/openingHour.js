@@ -14,12 +14,15 @@ async function createOpeningsUur(entity_id,channel_id,day,start_time,end_time, c
 
 async function deleteOpeningHour(id) {
     ;
-    const [rows, fields]  = await dbPool.query('DELETE FROM opening_hours where id = ?', [id]);
+    const [rows, fields]  = await dbPool.query('DELETE FROM opening_hours where id = ?', [parseInt(id)]);
     return rows.affectedRows;
 }
 
 async function getOpeningHoursInRange(entity_id, channel_id, from,to) {
-    const [rows, fields] =  await dbPool.query('SELECT * FROM opening_hours WHERE entity_id = ? and channel_id = ? AND start_time < ? and end_time > ?  ORDER BY start_time ASC', [entity_id, channel_id, to, from]);
+    console.log(parseInt(entity_id), parseInt(channel_id), parseInt(to), parseInt(from));
+    const [rows, fields] =  await dbPool.query('SELECT * FROM opening_hours WHERE entity_id = ? and channel_id = ? AND start_time < ? and end_time > ?  ORDER BY start_time ASC', [
+        parseInt(entity_id), parseInt(channel_id), parseInt(to), parseInt(from)
+    ]);
     var now = new Date();
     rows.forEach(function(item){
         item.start_time_object = new Date(item.start_time * 1000);
@@ -51,5 +54,6 @@ async function getOpeningHoursOfDay(entity_id, channel_id, date) {
 module.exports = {
     createOpeningsUur: createOpeningsUur,
     deleteOpeningHour: deleteOpeningHour,
-    getOpeningHoursOfDay: getOpeningHoursOfDay
+    getOpeningHoursOfDay: getOpeningHoursOfDay,
+    getOpeningHoursInRange: getOpeningHoursInRange
 };
