@@ -330,6 +330,18 @@ protectedRouter.delete('/channels/:id',  auth.authorize, async function (req, re
         console.error(err)
     }
 });
+
+protectedRouter.put('/channels/:id',  auth.authorize, async function (req, res) {
+    try {
+        var data = req.body;
+        var success = await channel.updateChannel(req.params.id, data.fieldName, data.fieldValue);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ success: (!!success)?'deleted':'did not exist' }));
+    } catch (err) {
+        console.error(err)
+    }
+});
+
 protectedRouter.delete('/entities/:id',  auth.authorize, async function (req, res) {
     try {
         var success = await entity.deleteEntity(req.params.id);

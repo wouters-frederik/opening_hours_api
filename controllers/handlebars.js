@@ -6,6 +6,9 @@ var register = function(Handlebars) {
         isSelected: function(p1, p2) {
             return parseInt(p1) === parseInt(p2) ? 'selected' : '';
         },
+        isChecked: function(p1) {
+            return (p1 == 'true' || p1 == 1 || p1 == true) ? 'checked' : '';
+        },
         compareEntityChannel: function(e1, e2, c1,c2) {
             return (parseInt(e1) === parseInt(e2) && parseInt(c1) === parseInt(c2)) ? 'selected' : '';
         },

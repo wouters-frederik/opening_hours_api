@@ -2,11 +2,25 @@
 const dbPool = require('./db');
 
 async function createChannel (name,user_id) {
-    const [results, fields] = await dbPool.query('INSERT into channels (`name`, `created`, `created_by`) VALUES (?,?,?)', [
+    const [results, fields] = await dbPool.query('INSERT into channels (`name`, `created`, `created_by`) VALUES (?,?,?);', [
         name,Math.floor(new Date().getTime()/1000),user_id
     ]);
     return results.insertId;
 }
+async function updateChannel (channelId,fieldName,fieldValue) {
+    if(fieldName == 'active') {
+        if(fieldValue == 'true' || fieldValue == true || fieldValue == 1) {
+            fieldValue = 1;
+        }else{
+            fieldValue = 0;
+        }
+    }
+    const [results, fields] = await dbPool.query('UPDATE  channels set '+fieldName+' = ? where id = ?;', [
+        fieldValue,parseInt(channelId)
+    ]);
+    return results.insertId;
+}
+
 
 async function loadChannels () {
     const [rows, fields] =  await dbPool.query('SELECT channels.* , users.name as user_name FROM channels, users WHERE channels.created_by = users.id ORDER BY name ASC', []);
@@ -40,4 +54,5 @@ module.exports = {
     loadChannels:loadChannels,
     deleteChannel:deleteChannel,
     createChannel:createChannel,
+    updateChannel:updateChannel
 }

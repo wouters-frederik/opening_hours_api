@@ -8,6 +8,7 @@
       <tr>
         <th scope="col">ID</th>
         <th scope="col">Channel</th>
+          <th></th>
           <th scope="col">created</th>
         <th scope="col"></th>
       </tr>
@@ -17,6 +18,9 @@
       <tr>
         <th scope="row">{{ id }}</th>
         <td>{{ name }}</td>
+          <td>
+              <input class="activeChannel" type="checkbox" {{ isChecked active }} data-channel-id="{{ id }}" data-toggle="toggle"  data-offstyle="danger" data-onstyle="success">
+          </td>
           <td>{{#if created}}
               {{   formatTime created_Date 'dd/MM/yyyy' }}
           {{/if}}
