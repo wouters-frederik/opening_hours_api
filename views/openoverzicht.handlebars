@@ -3,15 +3,16 @@
 <div class="container">
     <div class="row">
         <h1>Momenteel geopend</h1>
+        <br><br>
     {{#each entities}}
-        <h3>{{ name }} ({{ remote_id }})</h3>
+        <h4>{{ name }} ({{ remote_id }})</h4>
         <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">kanaal</th>
-                <th scope="col">open</th>
-            </tr>
-            </thead>
+            <!--<thead>-->
+            <!--<tr>-->
+                <!--<th scope="col">kanaal</th>-->
+                <!--<th scope="col">open</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
             <tbody>
             {{#each channels}}
                     <tr>
