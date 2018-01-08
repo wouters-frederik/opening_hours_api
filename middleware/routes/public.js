@@ -161,8 +161,10 @@ router.get('/open', async function (req, res) {
     var channels = await channel.loadChannels();
     var entities = await entity.loadEntities();
 
-    const [results, fields] = await dbPool.query('SELECT entity_id , channel_id, count(id) as existing FROM opening_hours ' +
-        'WHERE day = ?  AND start_time <= ?  AND end_time >= ? GROUP BY entity_id, channel_id',
+    const [results, fields] = await dbPool.query('' +
+        'SELECT o.entity_id , o.channel_id, count(o.id) as existing FROM opening_hours o, channels c ' +
+        'WHERE  day = ?  AND start_time <= ?  AND end_time >= ? AND c.id = o.channel_id  ' +
+        'GROUP BY o.entity_id, o.channel_id'
         [
             huidigeDag,
             datetime,
