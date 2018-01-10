@@ -19,7 +19,7 @@
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.min.css" integrity="sha256-mmiAhiWsn5EjME5u13M5klIesdx2mQQnvwSDFWwAW4E=" crossorigin="anonymous" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,6 +30,10 @@
 
 
     <style>
+        body > .container > .row{
+            margin-right: 0px !important;
+            margin-left: 0px !important;
+        }
         .days .day {
             margin-bottom: 0.5em;
         }
@@ -75,12 +79,15 @@
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.min.js" integrity="sha256-j9yXOqKOlGKkAerTz/6KCllekmWP3Kt3a7sBvMK8IGI=" crossorigin="anonymous"></script>
 <script type="text/javascript">
     $(function () {
         $('input[data-timepicker]').datetimepicker();
     });
 
     $(document).ready(function () {
+
+        $(".chosen-select").chosen({disable_search_threshold: 10});
 
         $('input.activeChannel[data-toggle]').bootstrapToggle({
             on: 'Active',

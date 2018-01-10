@@ -32,7 +32,7 @@
                     <label for="exampleFormControlSelect1" class="col-sm-2 col-form-label"> </label>
                     <div class="col-sm-6">
                         <input type="hidden" value="{{week}}" name="week">
-                        <select class="entityChooser" id="entityChooser" name="entity">
+                        <select class="entityChooser chosen-select" id="entityChooser" name="entity" >
                             {{#each entities}}
                                 <optgroup label="{{ name }}">
                                     {{#each ../channels}}
